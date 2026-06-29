@@ -110,7 +110,7 @@ Sub aBuildTieInManualFileSelect()
     addFlightOrderLeftCommentQuickturn 'This adds the comment how many Quickturn orders are left
     OpenEmailTieIn ' this copies the data from excel and paste it as a table in outlook
     StartUpdatingTimestamp ' resumes the update timestamp sub for POM data
-
+    
 End Sub
 
 Sub aFirstShiftDar()
@@ -359,51 +359,51 @@ Sub bEmailFirstDar()
     Dim outlookApp As Object
     Dim outlookMail As Object
     Dim rngToCopy As Range
-
+    
     ' Set the worksheets
     Set wsSource = ThisWorkbook.Sheets("FirstDar")
     Set wsConfig = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Get the folder path from cell B4 in FileConfig
     folderPath = "\\nw\data\NewGen_TKR_FC\Industrial Engineering\Server 5S Structure\23.0 EDC\POM_Final\DAR_Archive\First_Shift\" & wsConfig.Range("B4").Value & "\"
-
+    
     ' Create the file name with the current date and time
     currentDate = Format(Now, "MMDDYY_HHMM")
     fileName = "First_Shift_DAR_" & currentDate & ".xlsx"
-
+    
     ' Save a copy of the FirstDar sheet
     wsSource.Copy
     With ActiveWorkbook
         .SaveAs folderPath & fileName
         .Close False
     End With
-
+    
     ' Set the range to copy
     Set rngToCopy = wsSource.Range("B2:AB39")
-
+    
     ' Create a new Outlook application and mail item
     Set outlookApp = CreateObject("Outlook.Application")
     Set outlookMail = outlookApp.CreateItem(0) ' 0 = olMailItem
-
+    
     ' Prepare the email
     With outlookMail
         .To = "DL-BDSKC46FieldShop1stshift@exchange.boeing.com" ' Set the recipient's email address
         .CC = "DL-BDSKC46FieldManagers@exchange.boeing.com; DL-BDSKC46FieldTeamLeads@exchange.boeing.com" ' Add CC recipient
         .Subject = "1st Shift DAR"
         .Body = "Please find the attached First Shift DAR."
-
+        
         ' Copy the range to the clipboard
         rngToCopy.Copy
-
+        
         ' Paste the range into the email body
         .Display ' Show the email before sending
         .GetInspector.WordEditor.Application.Selection.Paste
-
+        
         ' Optionally, you can attach the saved file
         .Attachments.Add folderPath & fileName
-
+        
     End With
-
+    
     ' Clean up
     Set outlookMail = Nothing
     Set outlookApp = Nothing
@@ -418,55 +418,55 @@ Sub bEmailSecondDar()
     Dim outlookApp As Object
     Dim outlookMail As Object
     Dim rngToCopy As Range
-
+    
     ' Set the worksheets
     Set wsSource = ThisWorkbook.Sheets("SecondDar")
     Set wsConfig = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Get the folder path from cell B4 in FileConfig
     folderPath = "\\nw\data\NewGen_TKR_FC\Industrial Engineering\Server 5S Structure\23.0 EDC\POM_Final\DAR_Archive\Second_Shift\" & wsConfig.Range("B4").Value & "\"
-
+    
     ' Create the file name with the current date and time
     currentDate = Format(Now, "MMDDYY_HHMM")
     fileName = "Second_Shift_DAR_" & currentDate & ".xlsx"
-
+    
     ' Save a copy of the SecondDar sheet
     wsSource.Copy
     With ActiveWorkbook
         .SaveAs folderPath & fileName
         .Close False
     End With
-
+    
     ' Set the range to copy
     Set rngToCopy = wsSource.Range("B2:T41")
-
+    
     ' Create a new Outlook application and mail item
     Set outlookApp = CreateObject("Outlook.Application")
     Set outlookMail = outlookApp.CreateItem(0) ' 0 = olMailItem
-
+    
     ' Prepare the email
     With outlookMail
         .To = "DL-KC46BDSQAInspection2nd3rdShiftsEDC@exchange.boeing.com; DL-BDSKC46FieldShop2ndshift@exchange.boeing.com" ' Set the recipient's email address
         .CC = "DL-BDSKC46FieldManagers@exchange.boeing.com; DL-BDSKC46FieldTeamLeads@exchange.boeing.com" ' Add CC recipient
         .Subject = "2nd Shift DAR"
         .Body = ""
-
+        
         ' Copy the range to the clipboard
         rngToCopy.Copy
-
+        
         ' Paste the range into the email body
         .Display ' Show the email before sending
         .GetInspector.WordEditor.Application.Selection.Paste
-
+        
         ' Optionally, you can attach the saved file
         .Attachments.Add folderPath & fileName
-
+        
     End With
-
+    
     ' Clean up
     Set outlookMail = Nothing
     Set outlookApp = Nothing
-
+    
 End Sub
 
 Sub bEmailThirdDar()
@@ -478,61 +478,61 @@ Sub bEmailThirdDar()
     Dim outlookApp As Object
     Dim outlookMail As Object
     Dim rngToCopy As Range
-
+    
     ' Set the worksheets
     Set wsSource = ThisWorkbook.Sheets("ThirdDar") ' Change to ThirdDar
     Set wsConfig = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Get the folder path from cell B4 in FileConfig
     folderPath = "\\nw\data\NewGen_TKR_FC\Industrial Engineering\Server 5S Structure\23.0 EDC\POM_Final\DAR_Archive\Third_Shift\" & wsConfig.Range("B4").Value & "\"
-
+    
     ' Create the file name with the current date and time
     currentDate = Format(Now, "MMDDYY_HHMM")
     fileName = "Third_Shift_DAR_" & currentDate & ".xlsx"
-
+    
     ' Save a copy of the ThirdDar sheet
     wsSource.Copy
     With ActiveWorkbook
         .SaveAs folderPath & fileName
         .Close False
     End With
-
+    
     ' Set the range to copy
     Set rngToCopy = wsSource.Range("B2:T41") ' Adjust the range if needed
-
+    
     ' Create a new Outlook application and mail item
     Set outlookApp = CreateObject("Outlook.Application")
     Set outlookMail = outlookApp.CreateItem(0) ' 0 = olMailItem
-
+    
     ' Prepare the email
     With outlookMail
         .To = "DL-KC46BDSQAInspection2nd3rdShiftsEDC@exchange.boeing.com; DL-BDSKC46FieldShop3rdshift@exchange.boeing.com" ' Set the recipient's email address
         .CC = "DL-BDSKC46FieldManagers@exchange.boeing.com; DL-BDSKC46FieldTeamLeads@exchange.boeing.com" ' Add CC recipient
         .Subject = "3rd Shift DAR" ' Update subject line
         .Body = ""
-
+        
         ' Copy the range to the clipboard
         rngToCopy.Copy
-
+        
         ' Paste the range into the email body
         .Display ' Show the email before sending
         .GetInspector.WordEditor.Application.Selection.Paste
-
+        
         ' Optionally, you can attach the saved file
         .Attachments.Add folderPath & fileName
-
+        
     End With
-
+    
     ' Clean up
     Set outlookMail = Nothing
     Set outlookApp = Nothing
-
+    
 End Sub
 
 Sub OpenEdgeWithURL()
 
 ' This code is no longer used
-
+    
 End Sub
 
 Sub UpdateTimestamp()
@@ -580,7 +580,7 @@ Sub ClearTieInData()
     oldDataSheet.Cells.Clear
     compareSheet.Cells.Clear
     totalListSheet.Cells.Clear
-
+    
     ' Clear all contents and formatting in DataClean
     With dataCleanSheet
         .Cells.Clear ' Clear all contents
@@ -710,7 +710,7 @@ Sub EmptyImportCheck()
     If fileImportSheet.Cells(2, "A").Value = "" Then
         ' Display a message box if A2 is empty
         MsgBox "Problem with NewData, Program will close. Please re-open and try again after the next POM Data refresh.", vbExclamation
-
+        
         ' Stop all scripts and close the workbook
         Application.DisplayAlerts = False ' Disable alerts to prevent prompts
         ThisWorkbook.Close SaveChanges:=False ' Close the workbook without saving
@@ -826,41 +826,41 @@ Sub FirstDarCreateArchive()
     Dim fileConfigSheet As Worksheet
     Dim fileConfigTimestamp As String
     Dim fullFolderPath As String
-
+    
     ' Set the base folder path
     folderPath = "\\nw\data\NewGen_TKR_FC\Industrial Engineering\Server 5S Structure\23.0 EDC\POM_Final\DAR_Archive\First_Shift\"
-
+    
     ' Create the folder name with current date and time
     timeStamp = Format(Now, "MMDDYY_HHMM")
     folderName = "Dar_Archive_" & timeStamp
-
+    
     ' Create the full path for the main folder
     fullFolderPath = folderPath & folderName
-
+    
     ' Create the new folder
     On Error Resume Next ' Ignore error if folder already exists
     MkDir fullFolderPath
     On Error GoTo 0 ' Resume normal error handling
-
+    
     ' Set the worksheets
     Set fileExportSheet = ThisWorkbook.Sheets("FileExport")
     Set fileConfigSheet = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Write the folder name to FileConfig cell B4
     fileConfigSheet.Range("B4").Value = folderName
-
+    
     ' Get the timestamp from FileConfig cell B3
     fileConfigTimestamp = Format(fileConfigSheet.Range("B3").Value, "MMDDYY_HHMM")
-
+    
     ' Create a new workbook
     Set newWorkbook = Workbooks.Add
-
+    
     ' Copy data from FileExport sheet to the new workbook
     fileExportSheet.UsedRange.Copy Destination:=newWorkbook.Sheets(1).Range("A1")
-
+    
     ' Save the new workbook in the specified main folder
     newWorkbook.SaveAs fullFolderPath & "\First_Raw_Data_" & fileConfigTimestamp & ".xlsx"
-
+    
     ' Close the new workbook
     newWorkbook.Close SaveChanges:=False
 
@@ -876,41 +876,41 @@ Sub SecondDarCreateArchive()
     Dim fileConfigSheet As Worksheet
     Dim fileConfigTimestamp As String
     Dim fullFolderPath As String
-
+    
     ' Set the base folder path
     folderPath = "\\nw\data\NewGen_TKR_FC\Industrial Engineering\Server 5S Structure\23.0 EDC\POM_Final\DAR_Archive\Second_Shift\"
-
+    
     ' Create the folder name with current date and time
     timeStamp = Format(Now, "MMDDYY_HHMM")
     folderName = "Dar_Archive_" & timeStamp
-
+    
     ' Create the full path for the main folder
     fullFolderPath = folderPath & folderName
-
+    
     ' Create the new folder
     On Error Resume Next ' Ignore error if folder already exists
     MkDir fullFolderPath
     On Error GoTo 0 ' Resume normal error handling
-
+    
     ' Set the worksheets
     Set fileExportSheet = ThisWorkbook.Sheets("FileExport")
     Set fileConfigSheet = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Write the folder name to FileConfig cell B4
     fileConfigSheet.Range("B4").Value = folderName
-
+    
     ' Get the timestamp from FileConfig cell B3
     fileConfigTimestamp = Format(fileConfigSheet.Range("B3").Value, "MMDDYY_HHMM")
-
+    
     ' Create a new workbook
     Set newWorkbook = Workbooks.Add
-
+    
     ' Copy data from FileExport sheet to the new workbook
     fileExportSheet.UsedRange.Copy Destination:=newWorkbook.Sheets(1).Range("A1")
-
+    
     ' Save the new workbook in the specified main folder
     newWorkbook.SaveAs fullFolderPath & "\Second_Raw_Data_" & fileConfigTimestamp & ".xlsx"
-
+    
     ' Close the new workbook
     newWorkbook.Close SaveChanges:=False
 
@@ -926,41 +926,41 @@ Sub ThirdDarCreateArchive()
     Dim fileConfigSheet As Worksheet
     Dim fileConfigTimestamp As String
     Dim fullFolderPath As String
-
+    
     ' Set the base folder path
     folderPath = "\\nw\data\NewGen_TKR_FC\Industrial Engineering\Server 5S Structure\23.0 EDC\POM_Final\DAR_Archive\Third_Shift\"
-
+    
     ' Create the folder name with current date and time
     timeStamp = Format(Now, "MMDDYY_HHMM")
     folderName = "Dar_Archive_" & timeStamp
-
+    
     ' Create the full path for the main folder
     fullFolderPath = folderPath & folderName
-
+    
     ' Create the new folder
     On Error Resume Next ' Ignore error if folder already exists
     MkDir fullFolderPath
     On Error GoTo 0 ' Resume normal error handling
-
+    
     ' Set the worksheets
     Set fileExportSheet = ThisWorkbook.Sheets("FileExport")
     Set fileConfigSheet = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Write the folder name to FileConfig cell B4
     fileConfigSheet.Range("B4").Value = folderName
-
+    
     ' Get the timestamp from FileConfig cell B3
     fileConfigTimestamp = Format(fileConfigSheet.Range("B3").Value, "MMDDYY_HHMM")
-
+    
     ' Create a new workbook
     Set newWorkbook = Workbooks.Add
-
+    
     ' Copy data from FileExport sheet to the new workbook
     fileExportSheet.UsedRange.Copy Destination:=newWorkbook.Sheets(1).Range("A1")
-
+    
     ' Save the new workbook in the specified main folder
     newWorkbook.SaveAs fullFolderPath & "\Third_Raw_Data_" & fileConfigTimestamp & ".xlsx"
-
+    
     ' Close the new workbook
     newWorkbook.Close SaveChanges:=False
 
@@ -1072,7 +1072,7 @@ Sub ArchiveData()
         fso.CopyFile sourceFolderPath & oldDataFilePath, archivePath & oldDataFilePath
         oldDataFilePath = Dir ' Get the next matching file
     Loop
-
+    
 End Sub
 
 Sub DataTrimTieIn()
@@ -1083,26 +1083,26 @@ Sub DataTrimTieIn()
     Dim j As Long
     Dim checkRange As Range
     Dim cell As Range
-
+    
     Set wsExport = ThisWorkbook.Sheets("FileExport")
     Set wsImport = ThisWorkbook.Sheets("FileImport")
-
+    
     ' Clear existing headers and data in FileExport
     wsExport.Rows(1).ClearContents
     wsExport.Cells.ClearContents
-
+    
     ' Define the headers
     Dim headers As Variant
     headers = Array("Line Number", "Job Number", "Parent Job Number", "Order Number", "Description", "Notes", "POM Comments")
-
+    
     ' Loop through the headers array and add them to the first row
     For i = LBound(headers) To UBound(headers)
         wsExport.Cells(1, i + 1).Value = headers(i)
     Next i
-
+    
     ' Find the last row in FileImport
     lastRow = wsImport.Cells(wsImport.Rows.count, "A").End(xlUp).Row
-
+    
     ' Copy data from FileImport to FileExport
     wsImport.Range("A2:A" & lastRow).Copy wsExport.Range("A2") ' Copy column A to column A
     wsImport.Range("J2:J" & lastRow).Copy wsExport.Range("B2") ' Copy column J to column B
@@ -1111,7 +1111,7 @@ Sub DataTrimTieIn()
     wsImport.Range("C2:C" & lastRow).Copy wsExport.Range("E2") ' Copy column C to column E
     wsImport.Range("D2:D" & lastRow).Copy wsExport.Range("F2") ' Copy column D to column F
     wsImport.Range("F2:F" & lastRow).Copy wsExport.Range("G2") ' Copy column F to column G
-
+    
     ' Check for "-" in the data and replace it with an empty string
     lastRow = wsExport.Cells(wsExport.Rows.count, "A").End(xlUp).Row ' Update lastRow after copying data
     For i = 2 To lastRow ' Loop through rows starting from the second row
@@ -1213,14 +1213,14 @@ Sub CompareTimestamps()
     Dim ws As Worksheet
     Dim timeC2 As Date
     Dim timeB3 As Date
-
+    
     ' Set the worksheet to configSheet
     Set ws = ThisWorkbook.Sheets("FileConfig")
-
+    
     ' Get the time values from cells C2 and B3
     timeC2 = ws.Range("C2").Value
     timeB3 = ws.Range("B3").Value
-
+    
     ' Compare the timestamps
     If timeB3 > timeC2 Then
         ws.Range("B5").Value = "Replace"
@@ -1650,11 +1650,11 @@ Sub MoveToTotalList()
         If compareSheet.Cells(i, "W").Value <> "" Then
             ' Find the next blank row in TotalList
             lastRowTotalList = totalListSheet.Cells(totalListSheet.Rows.count, "A").End(xlUp).Row + 1
-
+            
             ' Copy data from columns I through O of Compare to TotalList
             compareSheet.Range(compareSheet.Cells(i, "I"), compareSheet.Cells(i, "O")).Copy
             totalListSheet.Cells(lastRowTotalList, "A").PasteSpecial Paste:=xlPasteValues
-
+            
             ' Put the word "Sell" in column L of TotalList
             totalListSheet.Cells(lastRowTotalList, "L").Value = "Sell"
         End If
@@ -1753,7 +1753,7 @@ Sub LNcorrectJoblist()
     For i = 1 To totalListLastRow
         totalListValue = totalListSheet.Cells(i, 1).Value
         matchFound = False
-
+        
         ' Loop through each value in columns A and B of Airplane List
         For j = 1 To airplaneListLastRow
             If totalListValue = airplaneListSheet.Cells(j, 1).Value Or totalListValue = airplaneListSheet.Cells(j, 2).Value Then
@@ -1836,7 +1836,7 @@ Sub AssignSortNumberToJob()
             jobSortSheet.Cells(i, "N").Value = jobSortSheet.Range("N82").Value
         End If
     Next i
-
+    
 End Sub
 
 Sub IncreaseChildSortNumber()
@@ -1919,10 +1919,10 @@ Sub SortDataByAirplaneAndJob()
     Dim lastRow As Long
 
     Set ws = ThisWorkbook.Sheets("TotalList")
-
+    
     ' Find the last row of data in the sheet
     lastRow = ws.Cells(ws.Rows.count, "A").End(xlUp).Row
-
+    
     ' Check if there is data to sort
     If lastRow < 2 Then
         MsgBox "No data to sort."
@@ -2004,16 +2004,16 @@ Sub flightOrderCount()
     ' Loop through the unique values and paste them in row 1 of DataClean
     For i = 1 To uniqueValues.count
         wsOutput.Cells(1, outputColumn).Value = uniqueValues(i)
-
+        
         ' Add labels in the rows below the unique value
         Dim j As Long
         For j = 0 To UBound(labels)
             wsOutput.Cells(j + 1, outputColumn + 1).Value = labels(j) ' Place labels in the column to the right
         Next j
-
+        
         ' Initialize count for 842-PREFLIGHT-STC-XXX
         count = 0
-
+        
         ' Define the search pattern for 842-PREFLIGHT-STC-XXX
         searchPattern = "842-PREFLIGHT-STC-*"
 
@@ -2026,13 +2026,13 @@ Sub flightOrderCount()
                 End If
             End If
         Next cell
-
+        
         ' Output the count in the 3rd column of the airplane's list row 1
         wsOutput.Cells(1, outputColumn + 2).Value = count
-
+        
         ' Initialize count for 842-POSTFLIGHT-STC-XXX
         count = 0
-
+        
         ' Define the search pattern for 842-POSTFLIGHT-STC-XXX
         searchPattern = "842-POSTFLIGHT-STC-*"
 
@@ -2045,13 +2045,13 @@ Sub flightOrderCount()
                 End If
             End If
         Next cell
-
+        
         ' Output the count in the 3rd column of the airplane's list row 2
         wsOutput.Cells(2, outputColumn + 2).Value = count
-
+        
         ' Initialize count for 842-PREFLTLMI-STC-XXX
         count = 0
-
+        
         ' Define the search pattern for 842-PREFLTLMI-STC-XXX
         searchPattern = "842-PREFLTLMI-STC-*"
 
@@ -2064,13 +2064,13 @@ Sub flightOrderCount()
                 End If
             End If
         Next cell
-
+        
         ' Output the count in the 3rd column of the airplane's list row 3
         wsOutput.Cells(3, outputColumn + 2).Value = count
-
+        
         ' Initialize count for 842-QUICKTURN-STC-XXX
         count = 0
-
+        
         ' Define the search pattern for 842-QUICKTURN-STC-XXX
         searchPattern = "842-QUICKTURN-STC-*"
 
@@ -2083,13 +2083,13 @@ Sub flightOrderCount()
                 End If
             End If
         Next cell
-
+        
         ' Output the count in the 3rd column of the airplane's list row 4
         wsOutput.Cells(4, outputColumn + 2).Value = count
-
+        
         ' Initialize count for 842-THRUFLIGHT-EDC-XXX
         count = 0
-
+        
         ' Define the search pattern for 842-THRUFLIGHT-EDC-XXX
         searchPattern = "842-THRUFLIGHT-EDC-*"
 
@@ -2102,13 +2102,13 @@ Sub flightOrderCount()
                 End If
             End If
         Next cell
-
+        
         ' Output the count in the 3rd column of the airplane's list row 5
         wsOutput.Cells(5, outputColumn + 2).Value = count
-
+        
         ' Initialize count for 842-THRUFLTLMI-STC-XX
         count = 0
-
+        
         ' Define the search pattern for 842-THRUFLTLMI-STC-XX
         searchPattern = "842-THRUFLTLMI-STC-*"
 
@@ -2121,10 +2121,10 @@ Sub flightOrderCount()
                 End If
             End If
         Next cell
-
+        
         ' Output the count in the 3rd column of the airplane's list row 6
         wsOutput.Cells(6, outputColumn + 2).Value = count
-
+        
         outputColumn = outputColumn + 3 ' Move to the next column (3 columns over)
     Next i
 End Sub
@@ -2150,26 +2150,26 @@ Sub flightOrderCleanListBuild()
     Set wsOutput = ThisWorkbook.Worksheets("Compare")
     ' Set the keys worksheet to DataClean
     Set wsKeys = ThisWorkbook.Worksheets("DataClean")
-
+    
     ' Initialize the output row
     outputRow = 1 ' Start at AE1 (row 1)
-
+    
     ' Initialize the column for keys (starting from column L which is 12)
     Col = 12
-
+    
     ' Loop through the columns (L, O, R, ...)
     Do While wsKeys.Cells(1, Col).Value <> ""
         ' Get the key from the current column in DataClean
         key = wsKeys.Cells(1, Col).Value
-
+        
         ' Get the last row in column A of the source sheet (TotalList)
         lastRow = wsSource.Cells(wsSource.Rows.count, 1).End(xlUp).Row
-
+        
         ' Initialize match found flag and lowest match
         matchFound = False
         lowestMatch = ""
         lowestDigits = 9999 ' Set to a high value
-
+        
         ' First, look for preflight matches in TotalList
         For i = 1 To lastRow
             ' Check if the key matches column A in TotalList
@@ -2178,14 +2178,14 @@ Sub flightOrderCleanListBuild()
                 If wsSource.Cells(i, 2).Value Like "842-PREFLIGHT-STC-*" And _
                    wsSource.Cells(i, 2).Value <> "842-PREFLIGHT-STC-FERRY" And _
                    wsSource.Cells(i, 12).Value = "" Then
-
+                   
                     ' Extract the last three characters from the matched B value
                     lastThreeChars = Right(wsSource.Cells(i, 2).Value, 3)
-
+                    
                     ' Check if the last three characters are numeric
                     If IsNumeric(lastThreeChars) Then
                         currentDigits = CLng(lastThreeChars)
-
+                        
                         ' Check if this is the lowest match
                         If currentDigits < lowestDigits Then
                             lowestDigits = currentDigits
@@ -2196,19 +2196,19 @@ Sub flightOrderCleanListBuild()
                 End If
             End If
         Next i
-
+        
         ' If a preflight match was found, display the key and the lowest match in DataClean
         If matchFound Then
             wsOutput.Cells(outputRow, 31).Value = key ' Column AE
             wsOutput.Cells(outputRow, 32).Value = lowestMatch ' Column AF
             outputRow = outputRow + 1
         End If
-
+        
         ' Reset for postflight search
         matchFound = False
         lowestMatch = ""
         lowestDigits = 9999 ' Reset to a high value
-
+        
         ' Now, look for postflight matches in TotalList
         For i = 1 To lastRow
             ' Check if the key matches column A in TotalList
@@ -2217,14 +2217,14 @@ Sub flightOrderCleanListBuild()
                 If wsSource.Cells(i, 2).Value Like "842-POSTFLIGHT-STC-*" And _
                    wsSource.Cells(i, 2).Value <> "842-PREFLIGHT-STC-FERRY" And _
                    wsSource.Cells(i, 12).Value = "" Then
-
+                   
                     ' Extract the last three characters from the matched B value
                     lastThreeChars = Right(wsSource.Cells(i, 2).Value, 3)
-
+                    
                     ' Check if the last three characters are numeric
                     If IsNumeric(lastThreeChars) Then
                         currentDigits = CLng(lastThreeChars)
-
+                        
                         ' Check if this is the lowest match
                         If currentDigits < lowestDigits Then
                             lowestDigits = currentDigits
@@ -2235,19 +2235,19 @@ Sub flightOrderCleanListBuild()
                 End If
             End If
         Next i
-
+        
         ' If a postflight match was found, display the key and the lowest match in DataClean
         If matchFound Then
             wsOutput.Cells(outputRow, 31).Value = key ' Column AE
             wsOutput.Cells(outputRow, 32).Value = lowestMatch ' Column AF
             outputRow = outputRow + 1
         End If
-
+        
         ' Reset for prefltlmi search
         matchFound = False
         lowestMatch = ""
         lowestDigits = 9999 ' Reset to a high value
-
+        
         ' Now, look for prefltlmi matches in TotalList
         For i = 1 To lastRow
             ' Check if the key matches column A in TotalList
@@ -2256,14 +2256,14 @@ Sub flightOrderCleanListBuild()
                 If wsSource.Cells(i, 2).Value Like "842-PREFLTLMI-STC-*" And _
                    wsSource.Cells(i, 2).Value <> "842-PREFLIGHT-STC-FERRY" And _
                    wsSource.Cells(i, 12).Value = "" Then
-
+                   
                     ' Extract the last three characters from the matched B value
                     lastThreeChars = Right(wsSource.Cells(i, 2).Value, 3)
-
+                    
                     ' Check if the last three characters are numeric
                     If IsNumeric(lastThreeChars) Then
                         currentDigits = CLng(lastThreeChars)
-
+                        
                         ' Check if this is the lowest match
                         If currentDigits < lowestDigits Then
                             lowestDigits = currentDigits
@@ -2274,19 +2274,19 @@ Sub flightOrderCleanListBuild()
                 End If
             End If
         Next i
-
+        
         ' If a prefltlmi match was found, display the key and the lowest match in DataClean
         If matchFound Then
             wsOutput.Cells(outputRow, 31).Value = key ' Column AE
             wsOutput.Cells(outputRow, 32).Value = lowestMatch ' Column AF
             outputRow = outputRow + 1
         End If
-
+        
         ' Reset for quickturn search
         matchFound = False
         lowestMatch = ""
         lowestDigits = 9999 ' Reset to a high value
-
+        
         ' Now, look for quickturn matches in TotalList
         For i = 1 To lastRow
             ' Check if the key matches column A in TotalList
@@ -2295,14 +2295,14 @@ Sub flightOrderCleanListBuild()
                 If wsSource.Cells(i, 2).Value Like "842-QUICKTURN-STC-*" And _
                    wsSource.Cells(i, 2).Value <> "842-PREFLIGHT-STC-FERRY" And _
                    wsSource.Cells(i, 12).Value = "" Then
-
+                   
                     ' Extract the last three characters from the matched B value
                     lastThreeChars = Right(wsSource.Cells(i, 2).Value, 3)
-
+                    
                     ' Check if the last three characters are numeric
                     If IsNumeric(lastThreeChars) Then
                         currentDigits = CLng(lastThreeChars)
-
+                        
                         ' Check if this is the lowest match
                         If currentDigits < lowestDigits Then
                             lowestDigits = currentDigits
@@ -2313,19 +2313,19 @@ Sub flightOrderCleanListBuild()
                 End If
             End If
         Next i
-
+        
         ' If a quickturn match was found, display the key and the lowest match in DataClean
         If matchFound Then
             wsOutput.Cells(outputRow, 31).Value = key ' Column AE
             wsOutput.Cells(outputRow, 32).Value = lowestMatch ' Column AF
             outputRow = outputRow + 1
         End If
-
+        
         ' Reset for thruflight search
         matchFound = False
         lowestMatch = ""
         lowestDigits = 9999 ' Reset to a high value
-
+        
         ' Now, look for thruflight matches in TotalList
         For i = 1 To lastRow
             ' Check if the key matches column A in TotalList
@@ -2333,14 +2333,14 @@ Sub flightOrderCleanListBuild()
                 ' Check if column B matches the thruflight format and column L is empty
                 If wsSource.Cells(i, 2).Value Like "842-THRUFLIGHT-EDC-*" And _
                    wsSource.Cells(i, 12).Value = "" Then
-
+                   
                     ' Extract the last three characters from the matched B value
                     lastThreeChars = Right(wsSource.Cells(i, 2).Value, 3)
-
+                    
                     ' Check if the last three characters are numeric
                     If IsNumeric(lastThreeChars) Then
                         currentDigits = CLng(lastThreeChars)
-
+                        
                         ' Check if this is the lowest match
                         If currentDigits < lowestDigits Then
                             lowestDigits = currentDigits
@@ -2351,19 +2351,19 @@ Sub flightOrderCleanListBuild()
                 End If
             End If
         Next i
-
+        
         ' If a thruflight match was found, display the key and the lowest match in DataClean
         If matchFound Then
             wsOutput.Cells(outputRow, 31).Value = key ' Column AE
             wsOutput.Cells(outputRow, 32).Value = lowestMatch ' Column AF
             outputRow = outputRow + 1
         End If
-
+        
         ' Reset for thruflti search
         matchFound = False
         lowestMatch = ""
         lowestDigits = 9999 ' Reset to a high value
-
+        
         ' Now, look for thruflti matches in TotalList
         For i = 1 To lastRow
             ' Check if the key matches column A in TotalList
@@ -2371,14 +2371,14 @@ Sub flightOrderCleanListBuild()
                 ' Check if column B matches the thruflti format and column L is empty
                 If wsSource.Cells(i, 2).Value Like "842-THRUFLTLMI-STC-*" And _
                    wsSource.Cells(i, 12).Value = "" Then
-
+                   
                     ' Extract the last three characters from the matched B value
                     lastThreeChars = Right(wsSource.Cells(i, 2).Value, 3)
-
+                    
                     ' Check if the last three characters are numeric
                     If IsNumeric(lastThreeChars) Then
                         currentDigits = CLng(lastThreeChars)
-
+                        
                         ' Check if this is the lowest match
                         If currentDigits < lowestDigits Then
                             lowestDigits = currentDigits
@@ -2389,14 +2389,14 @@ Sub flightOrderCleanListBuild()
                 End If
             End If
         Next i
-
+        
         ' If a thruflti match was found, display the key and the lowest match in DataClean
         If matchFound Then
             wsOutput.Cells(outputRow, 31).Value = key ' Column AE
             wsOutput.Cells(outputRow, 32).Value = lowestMatch ' Column AF
             outputRow = outputRow + 1
         End If
-
+        
         ' Move to the next column (skip one column)
         Col = Col + 3
     Loop
@@ -2416,19 +2416,19 @@ Sub flightOrderCleanJobDelete()
     Set wsSource = ThisWorkbook.Worksheets("TotalList")
     ' Set the output worksheet to DataClean
     Set wsOutput = ThisWorkbook.Worksheets("Compare")
-
+    
     ' Initialize the last row in column B of the source sheet
     lastRow = wsSource.Cells(wsSource.Rows.count, 2).End(xlUp).Row
-
+    
     ' Initialize the collection for exceptions
     Set exceptions = New Collection
     exceptions.Add "842-PREFLIGHT-STC-FERRY"
     exceptions.Add "842-PREFLTLMI-STC-FERRY"
-
+    
     ' Loop through each row in column B of TotalList
     For i = lastRow To 1 Step -1 ' Loop backwards to avoid skipping rows after deletion
         key = wsSource.Cells(i, 2).Value
-
+        
         ' Check if the value matches any of the patterns in list A
         If key Like "842-PREFLIGHT-STC-*" Or _
            key Like "842-POSTFLIGHT-STC-*" Or _
@@ -2436,18 +2436,18 @@ Sub flightOrderCleanJobDelete()
            key Like "842-QUICKTURN-STC-*" Or _
            key Like "842-THRUFLIGHT-EDC-*" Or _
            key Like "842-THRUFLTLMI-STC-*" Then
-
+           
             ' Check for exceptions
             If key = exceptions(1) Or key = exceptions(2) Then
                 ' Exception 1: Exact match with ferry values
                 GoTo DeleteRow
             End If
-
+            
             If wsSource.Cells(i, 12).Value <> "" Then
                 ' Exception 2: Column L has a value
                 GoTo DeleteRow
             End If
-
+            
             ' Exception 3: Check if column A and B match with column AE and AF on DataClean
             matchInDataClean = False
             outputRow = 1 ' Start checking from the first row in DataClean
@@ -2459,12 +2459,12 @@ Sub flightOrderCleanJobDelete()
                 End If
                 outputRow = outputRow + 1
             Loop
-
+            
             If matchInDataClean Then
                 ' Exception 3: A match was found in DataClean
                 GoTo DeleteRow
             End If
-
+            
             ' If no exceptions apply, delete the row
             wsSource.Rows(i).Delete
         End If
@@ -2592,7 +2592,7 @@ Sub TextColorUpdate()
                 .Cells(i, "D").Font.Color = RGB(0, 128, 0) ' Green
             End With
         End If
-
+        
         ' Check if there is a value in column G
         If dataCleanSheet.Cells(i, "G").Value <> "" Then
             ' Make text in column E Bold and Blue
@@ -2601,7 +2601,7 @@ Sub TextColorUpdate()
                 .Cells(i, "E").Font.Color = RGB(0, 0, 255) ' Blue
             End With
         End If
-
+        
         ' Check if there is a value in column H
         If dataCleanSheet.Cells(i, "H").Value <> "" Then
             ' Make text in columns B, D, and E Bold and Purple
@@ -2689,7 +2689,7 @@ Sub CreateAirplaneHeader()
             If valueA = valueC Then
                 ' If they match, replace the value in column B with the value from column D
                 dataCleanSheet.Cells(i, "B").Value = valueD
-
+                
                 ' Change the font color to black, set font size to 18, make it bold, underlined, and highlight
                 With dataCleanSheet.Cells(i, "B")
                     .Font.Color = RGB(0, 0, 0) ' Black color
@@ -2698,12 +2698,12 @@ Sub CreateAirplaneHeader()
                     .Font.Underline = xlUnderlineStyleSingle
                     .Interior.Color = RGB(255, 255, 0) ' Highlight with yellow color
                 End With
-
+                
                 foundMatch = True
                 Exit For ' Exit the inner loop once a match is found
             End If
         Next j
-
+        
         ' Merge and center cells from column B to D if a match was found
         If foundMatch Then
             With dataCleanSheet.Range(dataCleanSheet.Cells(i, "B"), dataCleanSheet.Cells(i, "D"))
@@ -2753,17 +2753,17 @@ Sub CreateJobHeader()
         ' Check if the current cell in column K is not blank and different from the cell above it
         If dataCleanSheet.Cells(i, "K").Value <> "" And _
            dataCleanSheet.Cells(i, "K").Value <> dataCleanSheet.Cells(i - 1, "K").Value Then
-
+            
             ' Copy the value from column K to column B of the row above
             dataCleanSheet.Cells(i - 1, "B").Value = dataCleanSheet.Cells(i, "K").Value
-
+            
             ' Merge and center columns B through D for the row above
             With dataCleanSheet.Range(dataCleanSheet.Cells(i - 1, "B"), dataCleanSheet.Cells(i - 1, "D"))
                 .Merge
                 .HorizontalAlignment = xlCenter ' Center the text
                 .VerticalAlignment = xlCenter ' Center the text vertically
             End With
-
+            
             ' Format the text in column B
             With dataCleanSheet.Cells(i - 1, "B").Font
                 .Color = RGB(255, 165, 0) ' Orange color
@@ -2771,7 +2771,7 @@ Sub CreateJobHeader()
                 .Size = 14 ' Set font size to 14
                 .Underline = xlUnderlineStyleSingle ' Underline the text
             End With
-
+            
             ' Align the text to the left
             dataCleanSheet.Cells(i - 1, "B").HorizontalAlignment = xlHAlignLeft
         End If
@@ -2795,23 +2795,23 @@ Sub MoveComments()
         If dataCleanSheet.Cells(i, "E").Value <> "" Then
             ' Insert a new row below the current row
             dataCleanSheet.Rows(i + 1).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-
+            
             ' Copy the data from column E to column D of the newly inserted row
             dataCleanSheet.Cells(i + 1, "D").Value = dataCleanSheet.Cells(i, "E").Value
-
+            
             ' Copy the formatting from the original row to the new row
             dataCleanSheet.Rows(i).Copy
             dataCleanSheet.Rows(i + 1).PasteSpecial Paste:=xlPasteFormats
-
-            ' Insert the character ï¿½ in column B of the newly inserted row
-            dataCleanSheet.Cells(i + 1, "B").Value = "ï¿½"
-
+            
+            ' Insert the character • in column B of the newly inserted row
+            dataCleanSheet.Cells(i + 1, "B").Value = "•"
+            
             ' Set the text alignment to right for column B
             dataCleanSheet.Cells(i + 1, "B").HorizontalAlignment = xlHAlignRight
-
+            
             ' Set the vertical alignment to middle for column B
             dataCleanSheet.Cells(i + 1, "B").VerticalAlignment = xlVAlignCenter
-
+            
             ' Clear the clipboard to avoid the marching ants around the copied range
             Application.CutCopyMode = False
         End If
@@ -2910,7 +2910,7 @@ Sub CreateHeaderSection()
     If countJobSells = 0 And countJobAdds = 0 Then
         dataCleanSheet.Rows(9).Delete
     End If
-
+    
 End Sub
 
 Sub TextFormat()
@@ -2978,12 +2978,12 @@ Sub addFlightOrderLeftCommentPreflight()
     ' Set the worksheets
     Set wsDataClean = ThisWorkbook.Worksheets("DataClean")
     Set wsJobSort = ThisWorkbook.Worksheets("JobSort")
-
+    
     ' Get the last row in column J of DataClean
     lastRowDataClean = wsDataClean.Cells(wsDataClean.Rows.count, 10).End(xlUp).Row
     ' Get the last row in column H of JobSort
     lastRowJobSort = wsJobSort.Cells(wsJobSort.Rows.count, 8).End(xlUp).Row
-
+    
     ' Loop through each cell in column J of DataClean
     For i = 1 To lastRowDataClean
         ' Check if the cell in column J is not blank
@@ -3000,22 +3000,22 @@ Sub addFlightOrderLeftCommentPreflight()
                     End If
                 End If
             Next j
-
+            
             ' If a match is found and column H of DataClean is blank, insert a new line below
             If matchFound And wsDataClean.Cells(i, 8).Value = "" Then ' Check if column H of DataClean is blank
                 wsDataClean.Rows(i + 1).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-
+                
                 ' Add bullet character to column B of the new row
-                wsDataClean.Cells(i + 1, 2).Value = "ï¿½" ' Column B is 2
-
+                wsDataClean.Cells(i + 1, 2).Value = "•" ' Column B is 2
+                
                 ' Get the value from column A of the matched row
                 key = wsDataClean.Cells(i, 1).Value
-
+                
                 ' Check for a match in columns L, O, R, etc.
                 matchInKeys = False
                 Dim colKey As Integer
                 colKey = 12 ' Start from column L (12)
-
+                
                 Do While wsDataClean.Cells(1, colKey).Value <> ""
                     If wsDataClean.Cells(1, colKey).Value = key Then
                         matchInKeys = True
@@ -3025,7 +3025,7 @@ Sub addFlightOrderLeftCommentPreflight()
                     End If
                     colKey = colKey + 3 ' Move to the next key column (skip one column)
                 Loop
-
+                
                 ' If a match was found, add the text to cell D of the new row
                 If matchInKeys Then
                     If xValue = 1 Then
@@ -3056,12 +3056,12 @@ Sub addFlightOrderLeftCommentPostflight()
     ' Set the worksheets
     Set wsDataClean = ThisWorkbook.Worksheets("DataClean")
     Set wsJobSort = ThisWorkbook.Worksheets("JobSort")
-
+    
     ' Get the last row in column J of DataClean
     lastRowDataClean = wsDataClean.Cells(wsDataClean.Rows.count, 10).End(xlUp).Row
     ' Get the last row in column J of JobSort
     lastRowJobSort = wsJobSort.Cells(wsJobSort.Rows.count, 10).End(xlUp).Row
-
+    
     ' Loop through each cell in column J of DataClean
     For i = 1 To lastRowDataClean
         ' Check if the cell in column J is not blank
@@ -3078,21 +3078,21 @@ Sub addFlightOrderLeftCommentPostflight()
                     End If
                 End If
             Next j
-
+            
             ' If a match is found and column H of DataClean is blank, insert a new line below
             If matchFound And wsDataClean.Cells(i, 8).Value = "" Then ' Check if column H of DataClean is blank
                 wsDataClean.Rows(i + 1).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-
+                
                 ' Add bullet character to column B of the new row
-                wsDataClean.Cells(i + 1, 2).Value = "ï¿½" ' Column B is 2
-
+                wsDataClean.Cells(i + 1, 2).Value = "•" ' Column B is 2
+                
                 ' Get the value from column A of the matched row
                 key = wsDataClean.Cells(i, 1).Value ' Key from column A
-
+                
                 ' Check for a match in columns L, O, R, etc.
                 matchInKeys = False
                 colKey = 12 ' Start from column L (12)
-
+                
                 Do While wsDataClean.Cells(1, colKey).Value <> ""
                     If wsDataClean.Cells(1, colKey).Value = key Then
                         matchInKeys = True
@@ -3102,7 +3102,7 @@ Sub addFlightOrderLeftCommentPostflight()
                     End If
                     colKey = colKey + 3 ' Move to the next key column (skip one column)
                 Loop
-
+                
                 ' If a match was found, add the text to cell D of the new row
                 If matchInKeys Then
                     If xValue = 1 Then
@@ -3133,12 +3133,12 @@ Sub addFlightOrderLeftCommentLMI()
     ' Set the worksheets
     Set wsDataClean = ThisWorkbook.Worksheets("DataClean")
     Set wsJobSort = ThisWorkbook.Worksheets("JobSort")
-
+    
     ' Get the last row in column J of DataClean
     lastRowDataClean = wsDataClean.Cells(wsDataClean.Rows.count, 10).End(xlUp).Row
     ' Get the last row in column I of JobSort
     lastRowJobSort = wsJobSort.Cells(wsJobSort.Rows.count, 9).End(xlUp).Row
-
+    
     ' Loop through each cell in column J of DataClean
     For i = 1 To lastRowDataClean
         ' Check if the cell in column J is not blank
@@ -3155,21 +3155,21 @@ Sub addFlightOrderLeftCommentLMI()
                     End If
                 End If
             Next j
-
+            
             ' If a match is found and column H of DataClean is blank, insert a new line below
             If matchFound And wsDataClean.Cells(i, 8).Value = "" Then ' Check if column H of DataClean is blank
                 wsDataClean.Rows(i + 1).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-
+                
                 ' Add bullet character to column B of the new row
-                wsDataClean.Cells(i + 1, 2).Value = "ï¿½" ' Column B is 2
-
+                wsDataClean.Cells(i + 1, 2).Value = "•" ' Column B is 2
+                
                 ' Get the value from column A of the matched row
                 key = wsDataClean.Cells(i, 1).Value ' Key from column A
-
+                
                 ' Check for a match in columns L, O, R, etc.
                 matchInKeys = False
                 colKey = 12 ' Start from column L (12)
-
+                
                 Do While wsDataClean.Cells(1, colKey).Value <> ""
                     If wsDataClean.Cells(1, colKey).Value = key Then
                         matchInKeys = True
@@ -3179,7 +3179,7 @@ Sub addFlightOrderLeftCommentLMI()
                     End If
                     colKey = colKey + 3 ' Move to the next key column (skip one column)
                 Loop
-
+                
                 ' If a match was found, add the text to cell D of the new row
                 If matchInKeys Then
                     If xValue = 1 Then
@@ -3210,12 +3210,12 @@ Sub addFlightOrderLeftCommentQuickturn()
     ' Set the worksheets
     Set wsDataClean = ThisWorkbook.Worksheets("DataClean")
     Set wsJobSort = ThisWorkbook.Worksheets("JobSort")
-
+    
     ' Get the last row in column J of DataClean
     lastRowDataClean = wsDataClean.Cells(wsDataClean.Rows.count, 10).End(xlUp).Row
     ' Get the last row in column K of JobSort
     lastRowJobSort = wsJobSort.Cells(wsJobSort.Rows.count, 11).End(xlUp).Row
-
+    
     ' Loop through each cell in column J of DataClean
     For i = 1 To lastRowDataClean
         ' Check if the cell in column J is not blank
@@ -3232,21 +3232,21 @@ Sub addFlightOrderLeftCommentQuickturn()
                     End If
                 End If
             Next j
-
+            
             ' If a match is found and column H of DataClean is blank, insert a new line below
             If matchFound And wsDataClean.Cells(i, 8).Value = "" Then ' Check if column H of DataClean is blank
                 wsDataClean.Rows(i + 1).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-
+                
                 ' Add bullet character to column B of the new row
-                wsDataClean.Cells(i + 1, 2).Value = "ï¿½" ' Column B is 2
-
+                wsDataClean.Cells(i + 1, 2).Value = "•" ' Column B is 2
+                
                 ' Get the value from column A of the matched row
                 key = wsDataClean.Cells(i, 1).Value ' Key from column A
-
+                
                 ' Check for a match in columns L, O, R, etc.
                 matchInKeys = False
                 colKey = 12 ' Start from column L (12)
-
+                
                 Do While wsDataClean.Cells(1, colKey).Value <> ""
                     If wsDataClean.Cells(1, colKey).Value = key Then
                         matchInKeys = True
@@ -3256,7 +3256,7 @@ Sub addFlightOrderLeftCommentQuickturn()
                     End If
                     colKey = colKey + 3 ' Move to the next key column (skip one column)
                 Loop
-
+                
                 ' If a match was found, add the text to cell D of the new row
                 If matchInKeys Then
                     If xValue = 1 Then
@@ -3270,178 +3270,350 @@ Sub addFlightOrderLeftCommentQuickturn()
     Next i
 End Sub
 
+' ============================================================
+
+' EMAIL ENGINE v2.0
+
+' Purpose:
+
+'   Builds the Tie-In email as clean editable Outlook HTML.
+
+'   No Excel copy/paste.
+
+'   No Windows clipboard dependency.
+
+'   No visible table borders.
+
+'   Forces all report text to uppercase.
+
+' ============================================================
+
 Sub OpenEmailTieIn()
-   Dim ws As Worksheet
-   Dim lastRow As Long
-   Dim outlookApp As Object
-   Dim outlookMail As Object
-   Dim emailHtml As String
-   Set ws = ThisWorkbook.Sheets("DataClean")
-   lastRow = Application.WorksheetFunction.Max( _
-       ws.Cells(ws.Rows.Count, "B").End(xlUp).Row, _
-       ws.Cells(ws.Rows.Count, "C").End(xlUp).Row, _
-       ws.Cells(ws.Rows.Count, "D").End(xlUp).Row)
-   If lastRow < 4 Then
-       MsgBox "No Tie-In data found to email.", vbExclamation
+
+    Dim ws As Worksheet
+
+    Dim lastRow As Long
+
+    Dim outlookApp As Object
+
+    Dim outlookMail As Object
+
+    Dim emailHtml As String
+
+    Set ws = ThisWorkbook.Sheets("DataClean")
+
+    lastRow = ws.Cells(ws.Rows.count, "B").End(xlUp).Row
+    If ws.Cells(ws.Rows.count, "C").End(xlUp).Row > lastRow Then
+       lastRow = ws.Cells(ws.Rows.count, "C").End(xlUp).Row
+    End If
+    
+    If ws.Cells(ws.Rows.count, "D").End(xlUp).Row > lastRow Then
+       lastRow = ws.Cells(ws.Rows.count, "D").End(xlUp).Row
+    End If
+   
+    If lastRow < 4 Then
+
+        MsgBox "No Tie-In data found to email.", vbExclamation
+
+        Exit Sub
+
+    End If
+
+    emailHtml = BuildTieInEmailHtml(ws, 4, lastRow)
+    '-----------------------------------------
+    ' Connect to Outlook
+    '-----------------------------------------
+    On Error Resume Next
+    Set outlookApp = GetObject(, "Outlook.Application")
+    On Error GoTo 0
+    If outlookApp Is Nothing Then
+       On Error Resume Next
+       Set outlookApp = CreateObject("Outlook.Application")
+       On Error GoTo 0
+    End If
+    If outlookApp Is Nothing Then
+       MsgBox "Unable to start Microsoft Outlook.", vbCritical
        Exit Sub
-   End If
-   emailHtml = BuildTieInEmailHtml(ws, 4, lastRow)
-   Set outlookApp = CreateObject("Outlook.Application")
-   Set outlookMail = outlookApp.CreateItem(0)
-   With outlookMail
-       .To = "DL-BDSKC46FieldTiein@exchange.boeing.com"
-       .Subject = "BDS Field Tie in"
-       .BodyFormat = 2
-       .Display
-       ' Keep Outlook signature, but insert clean editable HTML table above it.
-       .HTMLBody = emailHtml & .HTMLBody
-   End With
-   Set outlookMail = Nothing
-   Set outlookApp = Nothing
+    End If
+    On Error Resume Next
+    Set outlookMail = outlookApp.CreateItem(0)
+    On Error GoTo 0
+    If outlookMail Is Nothing Then
+       MsgBox "Unable to create Outlook email.", vbCritical
+       Exit Sub
+    End If
+        With outlookMail
+
+        .To = "DL-BDSKC46FieldTiein@exchange.boeing.com"
+
+        .Subject = "BDS Field Tie in"
+
+        .BodyFormat = 2
+
+        .Display
+
+        ' Keep user's Outlook signature, but insert report above it.
+
+        .HTMLBody = emailHtml & .HTMLBody
+
+    End With
+
+    Set outlookMail = Nothing
+
+    Set outlookApp = Nothing
+
 End Sub
 
+
 Private Function BuildTieInEmailHtml(ByVal ws As Worksheet, ByVal firstRow As Long, ByVal lastRow As Long) As String
-   Dim html As String
-   Dim r As Long
-   Dim c As Long
-   Dim cell As Range
-   Dim cellText As String
-   Dim colspan As Long
-   Dim cellStyle As String
-   Dim colWidthB As Long
-   Dim colWidthC As Long
-   Dim colWidthD As Long
-   colWidthB = CLng(ws.Columns("B").Width * 96 / 72)
-   colWidthC = CLng(ws.Columns("C").Width * 96 / 72)
-   colWidthD = CLng(ws.Columns("D").Width * 96 / 72)
-   html = ""
-   html = html & "<html><body>"
-   html = html & "<table cellpadding='0' cellspacing='0' "
-   html = html & "style='border-collapse:collapse;"
-   html = html & "font-family:Calibri,Arial,sans-serif;"
-   html = html & "font-size:11pt;'>"
-   html = html & "<colgroup>"
-   html = html & "<col style='width:" & colWidthB & "px;'>"
-   html = html & "<col style='width:" & colWidthC & "px;'>"
-   html = html & "<col style='width:" & colWidthD & "px;'>"
-   html = html & "</colgroup>"
-   For r = firstRow To lastRow
-       If TieInRowIsBlank(ws, r) Then
-           html = html & "<tr><td colspan='3' style='height:8px;border:none;'>&nbsp;</td></tr>"
-       Else
-           html = html & "<tr>"
-           For c = 2 To 4
-               Set cell = ws.Cells(r, c)
-               If cell.MergeCells Then
-                   If cell.Address <> cell.MergeArea.Cells(1, 1).Address Then
-                       GoTo NextCell
-                   End If
-                   colspan = TieInMergeColSpan(cell, 2, 4)
-               Else
-                   colspan = 1
-               End If
-               cellText = HtmlEncode(CStr(cell.Text))
-               cellText = Replace(cellText, vbCrLf, "<br>")
-               cellText = Replace(cellText, vbLf, "<br>")
-               cellText = Replace(cellText, vbCr, "<br>")
-               If Len(cellText) = 0 Then
-                   cellText = "&nbsp;"
-               End If
-               cellStyle = TieInCellStyle(cell)
-               html = html & "<td"
-               If colspan > 1 Then
-                   html = html & " colspan='" & colspan & "'"
-               End If
-               html = html & " style='" & cellStyle & "'>"
-               html = html & cellText
-               html = html & "</td>"
+
+    Dim html As String
+
+    Dim r As Long
+
+    Dim c As Long
+
+    Dim cell As Range
+
+    Dim cellText As String
+
+    Dim colspan As Long
+
+    Dim cellStyle As String
+
+    html = ""
+
+    html = html & "<div style='font-family:Calibri,Arial,sans-serif;font-size:11pt;'>"
+
+    html = html & "<table cellpadding='0' cellspacing='0' "
+
+    html = html & "style='border-collapse:collapse;border:none;mso-table-lspace:0pt;mso-table-rspace:0pt;'>"
+
+    For r = firstRow To lastRow
+
+        If TieInRowIsBlank(ws, r) Then
+
+            html = html & "<tr>"
+
+            html = html & "<td colspan='3' style='height:8px;border:none;padding:0;'>&nbsp;</td>"
+
+            html = html & "</tr>"
+
+        Else
+
+            html = html & "<tr>"
+
+            For c = 2 To 4
+
+                Set cell = ws.Cells(r, c)
+
+                If cell.MergeCells Then
+
+                    If cell.Address <> cell.MergeArea.Cells(1, 1).Address Then
+
+                        GoTo NextCell
+
+                    End If
+
+                    colspan = TieInMergeColSpan(cell, 2, 4)
+
+                Else
+
+                    colspan = 1
+
+                End If
+
+                cellText = HtmlEncode(UCase$(CStr(cell.Text)))
+
+                cellText = Replace(cellText, vbCrLf, "<br>")
+
+                cellText = Replace(cellText, vbLf, "<br>")
+
+                cellText = Replace(cellText, vbCr, "<br>")
+
+                If Len(cellText) = 0 Then
+
+                    cellText = "&nbsp;"
+
+                End If
+
+                cellStyle = TieInCellStyle(cell)
+
+                html = html & "<td"
+
+                If colspan > 1 Then
+
+                    html = html & " colspan='" & colspan & "'"
+
+                End If
+
+                html = html & " style='" & cellStyle & "'>"
+
+                html = html & cellText
+
+                html = html & "</td>"
+
 NextCell:
-           Next c
-           html = html & "</tr>"
-       End If
-   Next r
-   html = html & "</table>"
-   html = html & "</body></html>"
-   BuildTieInEmailHtml = html
+
+            Next c
+
+            html = html & "</tr>"
+
+        End If
+
+    Next r
+
+    html = html & "</table>"
+
+    html = html & "</div>"
+
+    BuildTieInEmailHtml = html
+
+End Function
+
+
+Private Function TieInCellStyle(ByVal cell As Range) As String
+
+    Dim styleText As String
+
+    styleText = ""
+
+    styleText = styleText & "border:none;"
+
+    styleText = styleText & "padding:5px 8px;"
+
+    styleText = styleText & "vertical-align:top;"
+
+    styleText = styleText & "white-space:normal;"
+
+    styleText = styleText & "font-family:Calibri,Arial,sans-serif;"
+
+    styleText = styleText & "font-size:11pt;"
+
+    If cell.Font.Bold Then
+
+        styleText = styleText & "font-weight:bold;"
+
+    Else
+
+        styleText = styleText & "font-weight:normal;"
+
+    End If
+
+    If cell.Font.Italic Then
+
+        styleText = styleText & "font-style:italic;"
+
+    End If
+
+    If cell.Font.Underline <> xlUnderlineStyleNone Then
+
+        styleText = styleText & "text-decoration:underline;"
+
+    End If
+
+    If cell.Font.ColorIndex <> xlColorIndexAutomatic Then
+
+        styleText = styleText & "color:" & ColorToHex(cell.Font.Color) & ";"
+
+    End If
+
+    If cell.Interior.ColorIndex <> xlColorIndexNone Then
+
+        styleText = styleText & "background-color:" & ColorToHex(cell.Interior.Color) & ";"
+
+    End If
+
+    Select Case cell.HorizontalAlignment
+
+        Case xlCenter
+
+            styleText = styleText & "text-align:center;"
+
+        Case xlRight
+
+            styleText = styleText & "text-align:right;"
+
+        Case Else
+
+            styleText = styleText & "text-align:left;"
+
+    End Select
+
+    TieInCellStyle = styleText
+
 End Function
 
 Private Function TieInRowIsBlank(ByVal ws As Worksheet, ByVal rowNumber As Long) As Boolean
-   TieInRowIsBlank = _
-       Len(Trim$(CStr(ws.Cells(rowNumber, "B").Text))) = 0 And _
-       Len(Trim$(CStr(ws.Cells(rowNumber, "C").Text))) = 0 And _
-       Len(Trim$(CStr(ws.Cells(rowNumber, "D").Text))) = 0
+   If Len(Trim$(CStr(ws.Cells(rowNumber, "B").Text))) = 0 _
+       And Len(Trim$(CStr(ws.Cells(rowNumber, "C").Text))) = 0 _
+       And Len(Trim$(CStr(ws.Cells(rowNumber, "D").Text))) = 0 Then
+       TieInRowIsBlank = True
+   Else
+       TieInRowIsBlank = False
+   End If
 End Function
+
 
 Private Function TieInMergeColSpan(ByVal cell As Range, ByVal firstCol As Long, ByVal lastCol As Long) As Long
-   Dim mergeFirstCol As Long
-   Dim mergeLastCol As Long
-   Dim spanFirstCol As Long
-   Dim spanLastCol As Long
-   mergeFirstCol = cell.MergeArea.Column
-   mergeLastCol = cell.MergeArea.Column + cell.MergeArea.Columns.Count - 1
-   spanFirstCol = Application.WorksheetFunction.Max(mergeFirstCol, firstCol)
-   spanLastCol = Application.WorksheetFunction.Min(mergeLastCol, lastCol)
-   TieInMergeColSpan = spanLastCol - spanFirstCol + 1
-   If TieInMergeColSpan < 1 Then
-       TieInMergeColSpan = 1
-   End If
+
+    Dim mergeFirstCol As Long
+
+    Dim mergeLastCol As Long
+
+    Dim spanFirstCol As Long
+
+    Dim spanLastCol As Long
+
+    mergeFirstCol = cell.MergeArea.Column
+
+    mergeLastCol = cell.MergeArea.Column + cell.MergeArea.Columns.count - 1
+
+    spanFirstCol = Application.WorksheetFunction.Max(mergeFirstCol, firstCol)
+
+    spanLastCol = Application.WorksheetFunction.Min(mergeLastCol, lastCol)
+
+    TieInMergeColSpan = spanLastCol - spanFirstCol + 1
+
+    If TieInMergeColSpan < 1 Then
+
+        TieInMergeColSpan = 1
+
+    End If
+
 End Function
 
-Private Function TieInCellStyle(ByVal cell As Range) As String
-   Dim styleText As String
-   styleText = ""
-   styleText = styleText & "border:1px solid #D9D9D9;"
-   styleText = styleText & "padding:3px 6px;"
-   styleText = styleText & "vertical-align:top;"
-   styleText = styleText & "white-space:normal;"
-   If cell.Font.Bold Then
-       styleText = styleText & "font-weight:bold;"
-   End If
-   If cell.Font.Italic Then
-       styleText = styleText & "font-style:italic;"
-   End If
-   If cell.Font.Underline <> xlUnderlineStyleNone Then
-       styleText = styleText & "text-decoration:underline;"
-   End If
-   If cell.Font.ColorIndex <> xlColorIndexAutomatic Then
-       styleText = styleText & "color:" & ColorToHex(cell.Font.Color) & ";"
-   End If
-   If cell.Interior.ColorIndex <> xlColorIndexNone Then
-       styleText = styleText & "background-color:" & ColorToHex(cell.Interior.Color) & ";"
-   End If
-   Select Case cell.HorizontalAlignment
-       Case xlCenter
-           styleText = styleText & "text-align:center;"
-       Case xlRight
-           styleText = styleText & "text-align:right;"
-       Case Else
-           styleText = styleText & "text-align:left;"
-   End Select
-   TieInCellStyle = styleText
-End Function
 
 Private Function ColorToHex(ByVal colorValue As Long) As String
    Dim redValue As Long
    Dim greenValue As Long
    Dim blueValue As Long
+   Dim redHex As String
+   Dim greenHex As String
+   Dim blueHex As String
    redValue = colorValue Mod 256
    greenValue = (colorValue \ 256) Mod 256
    blueValue = (colorValue \ 65536) Mod 256
-   ColorToHex = "#" & _
-       Right$("0" & Hex$(redValue), 2) & _
-       Right$("0" & Hex$(greenValue), 2) & _
-       Right$("0" & Hex$(blueValue), 2)
+   redHex = Right$("0" & Hex$(redValue), 2)
+   greenHex = Right$("0" & Hex$(greenValue), 2)
+   blueHex = Right$("0" & Hex$(blueValue), 2)
+   ColorToHex = "#" & redHex & greenHex & blueHex
 End Function
 
 Private Function HtmlEncode(ByVal textValue As String) As String
-   textValue = Replace(textValue, "&", "&amp;")
-   textValue = Replace(textValue, "<", "&lt;")
-   textValue = Replace(textValue, ">", "&gt;")
-   textValue = Replace(textValue, """", "&quot;")
-   HtmlEncode = textValue
-End Function
 
-Sub openWordTieIn()
+    textValue = Replace(textValue, "&", "&amp;")
+
+    textValue = Replace(textValue, "<", "&lt;")
+
+    textValue = Replace(textValue, ">", "&gt;")
+
+    textValue = Replace(textValue, """", "&quot;")
+
+    HtmlEncode = textValue
+
+End Function
+ Sub openWordTieIn()
     Dim dataCleanSheet As Worksheet
     Dim wordApp As Object
     Dim wordDoc As Object
@@ -3482,10 +3654,10 @@ Sub CombineWOAndJobDescription()
 
     ' Set the worksheet
     Set dataCleanSheet = ThisWorkbook.Sheets("FileExport")
-
+    
     ' Find the last row in column B
     lastRow = dataCleanSheet.Cells(dataCleanSheet.Rows.count, "B").End(xlUp).Row
-
+    
     ' Loop through each row starting from row 2
     For i = 2 To lastRow
         ' Concatenate values from column B and D and place in column I
@@ -3501,15 +3673,15 @@ Sub SeparateNames()
 
     ' Set the worksheet
     Set dataProcessSheet = ThisWorkbook.Sheets("FileExport")
-
+    
     ' Find the last row in column H
     lastRow = dataProcessSheet.Cells(dataProcessSheet.Rows.count, "H").End(xlUp).Row
-
+    
     ' Loop through each row in column H
     For i = 1 To lastRow
         ' Split the data points by comma
         dataPoints = Split(dataProcessSheet.Cells(i, "H").Value, ",")
-
+        
         ' Loop through each data point and place it in the corresponding cell in column K and beyond
         For j = LBound(dataPoints) To UBound(dataPoints)
             dataProcessSheet.Cells(i, "K").Offset(0, j).Value = Trim(dataPoints(j)) ' Trim to remove any leading/trailing spaces
@@ -3612,7 +3784,7 @@ Sub FillSecondDar()
             End If
         Next i
     Next Col
-
+    
 End Sub
 
 Sub FillThirdDar()
@@ -3660,7 +3832,7 @@ Sub FillThirdDar()
             End If
         Next i
     Next Col
-
+    
 End Sub
 
 Sub FillFirstDarPriorityBoard()
@@ -3688,7 +3860,7 @@ Sub FillFirstDarPriorityBoard()
     For i = 2 To lastRowFileExport
         ' Get the value from column K
         keyValueK = wsFileExport.Cells(i, "K").Value
-
+        
         ' Check if the cell in column K is not blank
         If keyValueK <> "" Then
             ' Loop through each row in column C of FirstDar to find a match
@@ -3701,7 +3873,7 @@ Sub FillFirstDarPriorityBoard()
                     wsFirstDar.Cells(pasteRow, "J").Value = wsFileExport.Cells(i, "G").Value ' Column G to Column J
                     wsFirstDar.Cells(pasteRow, "R").Value = wsFileExport.Cells(i, "F").Value ' Column F to Column R
                     wsFirstDar.Cells(pasteRow, "S").Value = wsFileExport.Cells(i, "E").Value ' Column E to Column S
-
+                    
                     ' Move to the next row in FirstDar for pasting
                     pasteRow = pasteRow + 1
                     Exit For ' Exit the inner loop once a match is found
@@ -3715,7 +3887,7 @@ Sub FillFirstDarPriorityBoard()
     For k = 24 To 38
         wsFirstDar.Cells(k, "AG").Value = wsFirstDar.Cells(k, "J").Value
     Next k
-
+    
     ' Set column AG to wrap text
     wsFirstDar.Columns("AG").WrapText = True
 
@@ -3746,7 +3918,7 @@ Sub FillSecondDarPriorityBoard()
     For i = 2 To lastRowFileExport
         ' Get the value from column K
         keyValueK = wsFileExport.Cells(i, "K").Value
-
+        
         ' Check if the cell in column K is not blank
         If keyValueK <> "" Then
             ' Loop through each row in column C of SecondDar to find a match
@@ -3759,7 +3931,7 @@ Sub FillSecondDarPriorityBoard()
                     wsSecondDar.Cells(pasteRow, "J").Value = wsFileExport.Cells(i, "G").Value ' Column G to Column J
                     wsSecondDar.Cells(pasteRow, "R").Value = wsFileExport.Cells(i, "F").Value ' Column F to Column R
                     wsSecondDar.Cells(pasteRow, "S").Value = wsFileExport.Cells(i, "E").Value ' Column E to Column S
-
+                    
                     ' Move to the next row in SecondDar for pasting
                     pasteRow = pasteRow + 1
                     Exit For ' Exit the inner loop once a match is found
@@ -3773,7 +3945,7 @@ Sub FillSecondDarPriorityBoard()
     For k = 26 To 40
         wsSecondDar.Cells(k, "AG").Value = wsSecondDar.Cells(k, "J").Value
     Next k
-
+    
     ' Set column AG to wrap text
     wsSecondDar.Columns("AG").WrapText = True
 
@@ -3804,7 +3976,7 @@ Sub FillThirdDarPriorityBoard()
     For i = 2 To lastRowFileExport
         ' Get the value from column K
         keyValueK = wsFileExport.Cells(i, "K").Value
-
+        
         ' Check if the cell in column K is not blank
         If keyValueK <> "" Then
             ' Loop through each row in column C of ThirdDar to find a match
@@ -3817,7 +3989,7 @@ Sub FillThirdDarPriorityBoard()
                     wsThirdDar.Cells(pasteRow, "J").Value = wsFileExport.Cells(i, "G").Value ' Column G to Column J
                     wsThirdDar.Cells(pasteRow, "R").Value = wsFileExport.Cells(i, "F").Value ' Column F to Column R
                     wsThirdDar.Cells(pasteRow, "S").Value = wsFileExport.Cells(i, "E").Value ' Column E to Column S
-
+                    
                     ' Move to the next row in ThirdDar for pasting
                     pasteRow = pasteRow + 1
                     Exit For ' Exit the inner loop once a match is found
@@ -3831,7 +4003,7 @@ Sub FillThirdDarPriorityBoard()
     For k = 17 To 31
         wsThirdDar.Cells(k, "AG").Value = wsThirdDar.Cells(k, "J").Value
     Next k
-
+    
     ' Set column AG to wrap text
     wsThirdDar.Columns("AG").WrapText = True
 
@@ -3884,15 +4056,15 @@ End Sub
 Sub zLineFiveButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F and G in temporary variables
     tempF = ActiveSheet.Range("F5").Value
     tempG = ActiveSheet.Range("G5").Value
-
+    
     ' Swap the values: Move M and N to F and G
     ActiveSheet.Range("F5").Value = ActiveSheet.Range("M5").Value
     ActiveSheet.Range("G5").Value = ActiveSheet.Range("N5").Value
-
+    
     ' Move the temporary values to M and N
     ActiveSheet.Range("M5").Value = tempF
     ActiveSheet.Range("N5").Value = tempG
@@ -3901,15 +4073,15 @@ End Sub
 Sub zLineFiveButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M5 and N5 in temporary variables
     tempM = ActiveSheet.Range("M5").Value
     tempN = ActiveSheet.Range("N5").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M5").Value = ActiveSheet.Range("T5").Value
     ActiveSheet.Range("N5").Value = ActiveSheet.Range("V5").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T5").Value = tempM
     ActiveSheet.Range("V5").Value = tempN
@@ -3918,15 +4090,15 @@ End Sub
 Sub zLineSixButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F6 and G6 in temporary variables
     tempF = ActiveSheet.Range("F6").Value
     tempG = ActiveSheet.Range("G6").Value
-
+    
     ' Swap the values: Move M6 and N6 to F6 and G6
     ActiveSheet.Range("F6").Value = ActiveSheet.Range("M6").Value
     ActiveSheet.Range("G6").Value = ActiveSheet.Range("N6").Value
-
+    
     ' Move the temporary values to M6 and N6
     ActiveSheet.Range("M6").Value = tempF
     ActiveSheet.Range("N6").Value = tempG
@@ -3935,15 +4107,15 @@ End Sub
 Sub zLineSixButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M6 and N6 in temporary variables
     tempM = ActiveSheet.Range("M6").Value
     tempN = ActiveSheet.Range("N6").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M6").Value = ActiveSheet.Range("T6").Value
     ActiveSheet.Range("N6").Value = ActiveSheet.Range("V6").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T6").Value = tempM
     ActiveSheet.Range("V6").Value = tempN
@@ -3952,15 +4124,15 @@ End Sub
 Sub zLineSevenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F7 and G7 in temporary variables
     tempF = ActiveSheet.Range("F7").Value
     tempG = ActiveSheet.Range("G7").Value
-
+    
     ' Swap the values: Move M7 and N7 to F7 and G7
     ActiveSheet.Range("F7").Value = ActiveSheet.Range("M7").Value
     ActiveSheet.Range("G7").Value = ActiveSheet.Range("N7").Value
-
+    
     ' Move the temporary values to M7 and N7
     ActiveSheet.Range("M7").Value = tempF
     ActiveSheet.Range("N7").Value = tempG
@@ -3969,15 +4141,15 @@ End Sub
 Sub zLineEightButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F8 and G8 in temporary variables
     tempF = ActiveSheet.Range("F8").Value
     tempG = ActiveSheet.Range("G8").Value
-
+    
     ' Swap the values: Move M8 and N8 to F8 and G8
     ActiveSheet.Range("F8").Value = ActiveSheet.Range("M8").Value
     ActiveSheet.Range("G8").Value = ActiveSheet.Range("N8").Value
-
+    
     ' Move the temporary values to M8 and N8
     ActiveSheet.Range("M8").Value = tempF
     ActiveSheet.Range("N8").Value = tempG
@@ -3986,15 +4158,15 @@ End Sub
 Sub zLineEightButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M8 and N8 in temporary variables
     tempM = ActiveSheet.Range("M8").Value
     tempN = ActiveSheet.Range("N8").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M8").Value = ActiveSheet.Range("T8").Value
     ActiveSheet.Range("N8").Value = ActiveSheet.Range("V8").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T8").Value = tempM
     ActiveSheet.Range("V8").Value = tempN
@@ -4003,15 +4175,15 @@ End Sub
 Sub zLineNineButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F9 and G9 in temporary variables
     tempF = ActiveSheet.Range("F9").Value
     tempG = ActiveSheet.Range("G9").Value
-
+    
     ' Swap the values: Move M9 and N9 to F9 and G9
     ActiveSheet.Range("F9").Value = ActiveSheet.Range("M9").Value
     ActiveSheet.Range("G9").Value = ActiveSheet.Range("N9").Value
-
+    
     ' Move the temporary values to M9 and N9
     ActiveSheet.Range("M9").Value = tempF
     ActiveSheet.Range("N9").Value = tempG
@@ -4020,15 +4192,15 @@ End Sub
 Sub zLineNineButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M9 and N9 in temporary variables
     tempM = ActiveSheet.Range("M9").Value
     tempN = ActiveSheet.Range("N9").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M9").Value = ActiveSheet.Range("T9").Value
     ActiveSheet.Range("N9").Value = ActiveSheet.Range("V9").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T9").Value = tempM
     ActiveSheet.Range("V9").Value = tempN
@@ -4037,15 +4209,15 @@ End Sub
 Sub zLineTenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F10 and G10 in temporary variables
     tempF = ActiveSheet.Range("F10").Value
     tempG = ActiveSheet.Range("G10").Value
-
+    
     ' Swap the values: Move M10 and N10 to F10 and G10
     ActiveSheet.Range("F10").Value = ActiveSheet.Range("M10").Value
     ActiveSheet.Range("G10").Value = ActiveSheet.Range("N10").Value
-
+    
     ' Move the temporary values to M10 and N10
     ActiveSheet.Range("M10").Value = tempF
     ActiveSheet.Range("N10").Value = tempG
@@ -4054,15 +4226,15 @@ End Sub
 Sub zLineTenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M10 and N10 in temporary variables
     tempM = ActiveSheet.Range("M10").Value
     tempN = ActiveSheet.Range("N10").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M10").Value = ActiveSheet.Range("T10").Value
     ActiveSheet.Range("N10").Value = ActiveSheet.Range("V10").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T10").Value = tempM
     ActiveSheet.Range("V10").Value = tempN
@@ -4071,15 +4243,15 @@ End Sub
 Sub zLineElevenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F11 and G11 in temporary variables
     tempF = ActiveSheet.Range("F11").Value
     tempG = ActiveSheet.Range("G11").Value
-
+    
     ' Swap the values: Move M11 and N11 to F11 and G11
     ActiveSheet.Range("F11").Value = ActiveSheet.Range("M11").Value
     ActiveSheet.Range("G11").Value = ActiveSheet.Range("N11").Value
-
+    
     ' Move the temporary values to M11 and N11
     ActiveSheet.Range("M11").Value = tempF
     ActiveSheet.Range("N11").Value = tempG
@@ -4088,15 +4260,15 @@ End Sub
 Sub zLineElevenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M11 and N11 in temporary variables
     tempM = ActiveSheet.Range("M11").Value
     tempN = ActiveSheet.Range("N11").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M11").Value = ActiveSheet.Range("T11").Value
     ActiveSheet.Range("N11").Value = ActiveSheet.Range("V11").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T11").Value = tempM
     ActiveSheet.Range("V11").Value = tempN
@@ -4105,15 +4277,15 @@ End Sub
 Sub zLineTwelveButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F12 and G12 in temporary variables
     tempF = ActiveSheet.Range("F12").Value
     tempG = ActiveSheet.Range("G12").Value
-
+    
     ' Swap the values: Move M12 and N12 to F12 and G12
     ActiveSheet.Range("F12").Value = ActiveSheet.Range("M12").Value
     ActiveSheet.Range("G12").Value = ActiveSheet.Range("N12").Value
-
+    
     ' Move the temporary values to M12 and N12
     ActiveSheet.Range("M12").Value = tempF
     ActiveSheet.Range("N12").Value = tempG
@@ -4122,15 +4294,15 @@ End Sub
 Sub zLineTwelveButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M12 and N12 in temporary variables
     tempM = ActiveSheet.Range("M12").Value
     tempN = ActiveSheet.Range("N12").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M12").Value = ActiveSheet.Range("T12").Value
     ActiveSheet.Range("N12").Value = ActiveSheet.Range("V12").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T12").Value = tempM
     ActiveSheet.Range("V12").Value = tempN
@@ -4139,15 +4311,15 @@ End Sub
 Sub zLineThirteenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F13 and G13 in temporary variables
     tempF = ActiveSheet.Range("F13").Value
     tempG = ActiveSheet.Range("G13").Value
-
+    
     ' Swap the values: Move M13 and N13 to F13 and G13
     ActiveSheet.Range("F13").Value = ActiveSheet.Range("M13").Value
     ActiveSheet.Range("G13").Value = ActiveSheet.Range("N13").Value
-
+    
     ' Move the temporary values to M13 and N13
     ActiveSheet.Range("M13").Value = tempF
     ActiveSheet.Range("N13").Value = tempG
@@ -4156,15 +4328,15 @@ End Sub
 Sub zLineThirteenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M13 and N13 in temporary variables
     tempM = ActiveSheet.Range("M13").Value
     tempN = ActiveSheet.Range("N13").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M13").Value = ActiveSheet.Range("T13").Value
     ActiveSheet.Range("N13").Value = ActiveSheet.Range("V13").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T13").Value = tempM
     ActiveSheet.Range("V13").Value = tempN
@@ -4173,15 +4345,15 @@ End Sub
 Sub zLineFourteenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F14 and G14 in temporary variables
     tempF = ActiveSheet.Range("F14").Value
     tempG = ActiveSheet.Range("G14").Value
-
+    
     ' Swap the values: Move M14 and N14 to F14 and G14
     ActiveSheet.Range("F14").Value = ActiveSheet.Range("M14").Value
     ActiveSheet.Range("G14").Value = ActiveSheet.Range("N14").Value
-
+    
     ' Move the temporary values to M14 and N14
     ActiveSheet.Range("M14").Value = tempF
     ActiveSheet.Range("N14").Value = tempG
@@ -4190,15 +4362,15 @@ End Sub
 Sub zLineFourteenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M14 and N14 in temporary variables
     tempM = ActiveSheet.Range("M14").Value
     tempN = ActiveSheet.Range("N14").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M14").Value = ActiveSheet.Range("T14").Value
     ActiveSheet.Range("N14").Value = ActiveSheet.Range("V14").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T14").Value = tempM
     ActiveSheet.Range("V14").Value = tempN
@@ -4207,15 +4379,15 @@ End Sub
 Sub zLineFifteenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F15 and G15 in temporary variables
     tempF = ActiveSheet.Range("F15").Value
     tempG = ActiveSheet.Range("G15").Value
-
+    
     ' Swap the values: Move M15 and N15 to F15 and G15
     ActiveSheet.Range("F15").Value = ActiveSheet.Range("M15").Value
     ActiveSheet.Range("G15").Value = ActiveSheet.Range("N15").Value
-
+    
     ' Move the temporary values to M15 and N15
     ActiveSheet.Range("M15").Value = tempF
     ActiveSheet.Range("N15").Value = tempG
@@ -4224,15 +4396,15 @@ End Sub
 Sub zLineFifteenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M15 and N15 in temporary variables
     tempM = ActiveSheet.Range("M15").Value
     tempN = ActiveSheet.Range("N15").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M15").Value = ActiveSheet.Range("T15").Value
     ActiveSheet.Range("N15").Value = ActiveSheet.Range("V15").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T15").Value = tempM
     ActiveSheet.Range("V15").Value = tempN
@@ -4241,15 +4413,15 @@ End Sub
 Sub zLineSixteenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F16 and G16 in temporary variables
     tempF = ActiveSheet.Range("F16").Value
     tempG = ActiveSheet.Range("G16").Value
-
+    
     ' Swap the values: Move M16 and N16 to F16 and G16
     ActiveSheet.Range("F16").Value = ActiveSheet.Range("M16").Value
     ActiveSheet.Range("G16").Value = ActiveSheet.Range("N16").Value
-
+    
     ' Move the temporary values to M16 and N16
     ActiveSheet.Range("M16").Value = tempF
     ActiveSheet.Range("N16").Value = tempG
@@ -4258,15 +4430,15 @@ End Sub
 Sub zLineSixteenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M16 and N16 in temporary variables
     tempM = ActiveSheet.Range("M16").Value
     tempN = ActiveSheet.Range("N16").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M16").Value = ActiveSheet.Range("T16").Value
     ActiveSheet.Range("N16").Value = ActiveSheet.Range("V16").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T16").Value = tempM
     ActiveSheet.Range("V16").Value = tempN
@@ -4275,15 +4447,15 @@ End Sub
 Sub zLineSeventeenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F17 and G17 in temporary variables
     tempF = ActiveSheet.Range("F17").Value
     tempG = ActiveSheet.Range("G17").Value
-
+    
     ' Swap the values: Move M17 and N17 to F17 and G17
     ActiveSheet.Range("F17").Value = ActiveSheet.Range("M17").Value
     ActiveSheet.Range("G17").Value = ActiveSheet.Range("N17").Value
-
+    
     ' Move the temporary values to M17 and N17
     ActiveSheet.Range("M17").Value = tempF
     ActiveSheet.Range("N17").Value = tempG
@@ -4292,15 +4464,15 @@ End Sub
 Sub zLineSeventeenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M17 and N17 in temporary variables
     tempM = ActiveSheet.Range("M17").Value
     tempN = ActiveSheet.Range("N17").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M17").Value = ActiveSheet.Range("T17").Value
     ActiveSheet.Range("N17").Value = ActiveSheet.Range("V17").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T17").Value = tempM
     ActiveSheet.Range("V17").Value = tempN
@@ -4309,15 +4481,15 @@ End Sub
 Sub zLineEighteenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F18 and G18 in temporary variables
     tempF = ActiveSheet.Range("F18").Value
     tempG = ActiveSheet.Range("G18").Value
-
+    
     ' Swap the values: Move M18 and N18 to F18 and G18
     ActiveSheet.Range("F18").Value = ActiveSheet.Range("M18").Value
     ActiveSheet.Range("G18").Value = ActiveSheet.Range("N18").Value
-
+    
     ' Move the temporary values to M18 and N18
     ActiveSheet.Range("M18").Value = tempF
     ActiveSheet.Range("N18").Value = tempG
@@ -4326,15 +4498,15 @@ End Sub
 Sub zLineEighteenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M18 and N18 in temporary variables
     tempM = ActiveSheet.Range("M18").Value
     tempN = ActiveSheet.Range("N18").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M18").Value = ActiveSheet.Range("T18").Value
     ActiveSheet.Range("N18").Value = ActiveSheet.Range("V18").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T18").Value = tempM
     ActiveSheet.Range("V18").Value = tempN
@@ -4343,15 +4515,15 @@ End Sub
 Sub zLineNineteenButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F19 and G19 in temporary variables
     tempF = ActiveSheet.Range("F19").Value
     tempG = ActiveSheet.Range("G19").Value
-
+    
     ' Swap the values: Move M19 and N19 to F19 and G19
     ActiveSheet.Range("F19").Value = ActiveSheet.Range("M19").Value
     ActiveSheet.Range("G19").Value = ActiveSheet.Range("N19").Value
-
+    
     ' Move the temporary values to M19 and N19
     ActiveSheet.Range("M19").Value = tempF
     ActiveSheet.Range("N19").Value = tempG
@@ -4360,15 +4532,15 @@ End Sub
 Sub zLineNineteenButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M19 and N19 in temporary variables
     tempM = ActiveSheet.Range("M19").Value
     tempN = ActiveSheet.Range("N19").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M19").Value = ActiveSheet.Range("T19").Value
     ActiveSheet.Range("N19").Value = ActiveSheet.Range("V19").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T19").Value = tempM
     ActiveSheet.Range("V19").Value = tempN
@@ -4377,15 +4549,15 @@ End Sub
 Sub zLineTwentyButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F20 and G20 in temporary variables
     tempF = ActiveSheet.Range("F20").Value
     tempG = ActiveSheet.Range("G20").Value
-
+    
     ' Swap the values: Move M20 and N20 to F20 and G20
     ActiveSheet.Range("F20").Value = ActiveSheet.Range("M20").Value
     ActiveSheet.Range("G20").Value = ActiveSheet.Range("N20").Value
-
+    
     ' Move the temporary values to M20 and N20
     ActiveSheet.Range("M20").Value = tempF
     ActiveSheet.Range("N20").Value = tempG
@@ -4394,15 +4566,15 @@ End Sub
 Sub zLineTwentyButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M20 and N20 in temporary variables
     tempM = ActiveSheet.Range("M20").Value
     tempN = ActiveSheet.Range("N20").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M20").Value = ActiveSheet.Range("T20").Value
     ActiveSheet.Range("N20").Value = ActiveSheet.Range("V20").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T20").Value = tempM
     ActiveSheet.Range("V20").Value = tempN
@@ -4411,15 +4583,15 @@ End Sub
 Sub zLineTwentyOneButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F21 and G21 in temporary variables
     tempF = ActiveSheet.Range("F21").Value
     tempG = ActiveSheet.Range("G21").Value
-
+    
     ' Swap the values: Move M21 and N21 to F21 and G21
     ActiveSheet.Range("F21").Value = ActiveSheet.Range("M21").Value
     ActiveSheet.Range("G21").Value = ActiveSheet.Range("N21").Value
-
+    
     ' Move the temporary values to M21 and N21
     ActiveSheet.Range("M21").Value = tempF
     ActiveSheet.Range("N21").Value = tempG
@@ -4428,15 +4600,15 @@ End Sub
 Sub zLineTwentyOneButtonLRTwo()
     Dim tempM As Variant
     Dim tempN As Variant
-
+    
     ' Store the values from cells M21 and N21 in temporary variables
     tempM = ActiveSheet.Range("M21").Value
     tempN = ActiveSheet.Range("N21").Value
-
+    
     ' Swap the values: Move T and V to M and N
     ActiveSheet.Range("M21").Value = ActiveSheet.Range("T21").Value
     ActiveSheet.Range("N21").Value = ActiveSheet.Range("V21").Value
-
+    
     ' Move the temporary values to T and V
     ActiveSheet.Range("T21").Value = tempM
     ActiveSheet.Range("V21").Value = tempN
@@ -4445,15 +4617,15 @@ End Sub
 Sub zLineTwentyTwoButtonLROne()
     Dim tempF As Variant
     Dim tempG As Variant
-
+    
     ' Store the values from cells F22 and G22 in temporary variables
     tempF = ActiveSheet.Range("F22").Value
     tempG = ActiveSheet.Range("G22").Value
-
+    
     ' Swap the values: Move M22 and N22 to F22 and G22
     ActiveSheet.Range("F22").Value = ActiveSheet.Range("M22").Value
     ActiveSheet.Range("G22").Value = ActiveSheet.Range("N22").Value
-
+    
     ' Move the temporary values to M22 and N22
     ActiveSheet.Range("M22").Value = tempF
     ActiveSheet.Range("N22").Value = tempG
