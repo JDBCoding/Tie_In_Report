@@ -2786,37 +2786,28 @@ Sub MoveComments()
     Dim lastRow As Long
     Dim i As Long
 
-    ' Set the Data Clean sheet
     Set dataCleanSheet = ThisWorkbook.Sheets("DataClean")
+    lastRow = dataCleanSheet.Cells(dataCleanSheet.Rows.Count, "E").End(xlUp).Row
 
-    ' Find the last row in column E of the Data Clean sheet
-    lastRow = dataCleanSheet.Cells(dataCleanSheet.Rows.count, "E").End(xlUp).Row
-
-    ' Loop through each row in column E starting from the last row to avoid shifting issues
-    For i = lastRow To 1 Step -1 ' Start from the last row
-        ' Check if the current cell in column E is not blank
+    For i = lastRow To 1 Step -1
         If dataCleanSheet.Cells(i, "E").Value <> "" Then
-            ' Insert a new row below the current row
             dataCleanSheet.Rows(i + 1).Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
 
-            ' Copy the data from column E to column D of the newly inserted row
+            dataCleanSheet.Cells(i + 1, "B").Value = ChrW(8226)
             dataCleanSheet.Cells(i + 1, "D").Value = dataCleanSheet.Cells(i, "E").Value
 
-            ' Copy the formatting from the original row to the new row
-            dataCleanSheet.Rows(i).Copy
-            dataCleanSheet.Rows(i + 1).PasteSpecial Paste:=xlPasteFormats
+            dataCleanSheet.Cells(i + 1, "B").HorizontalAlignment = xlRight
+            dataCleanSheet.Cells(i + 1, "B").VerticalAlignment = xlTop
 
-            ' Insert the character � in column B of the newly inserted row
-            dataCleanSheet.Cells(i + 1, "B").Value = "�"
-
-            ' Set the text alignment to right for column B
-            dataCleanSheet.Cells(i + 1, "B").HorizontalAlignment = xlHAlignRight
-
-            ' Set the vertical alignment to middle for column B
-            dataCleanSheet.Cells(i + 1, "B").VerticalAlignment = xlVAlignCenter
-
-            ' Clear the clipboard to avoid the marching ants around the copied range
-            Application.CutCopyMode = False
+            With dataCleanSheet.Cells(i + 1, "D")
+                .Font.Name = dataCleanSheet.Cells(i, "E").Font.Name
+                .Font.Size = dataCleanSheet.Cells(i, "E").Font.Size
+                .Font.Bold = dataCleanSheet.Cells(i, "E").Font.Bold
+                .Font.Color = dataCleanSheet.Cells(i, "E").Font.Color
+                .WrapText = True
+                .HorizontalAlignment = xlLeft
+                .VerticalAlignment = xlTop
+            End With
         End If
     Next i
 End Sub
@@ -2991,91 +2982,56 @@ End Sub
 
 
 Sub TextFormat()
-
     Dim dataCleanSheet As Worksheet
-
     Dim lastRow As Long
-
     Dim i As Long
-
-    Dim bText As String
-
-    Dim dText As String
 
     Set dataCleanSheet = ThisWorkbook.Sheets("DataClean")
 
-    lastRow = dataCleanSheet.Cells(dataCleanSheet.Rows.Count, "D").End(xlUp).Row
+    lastRow = dataCleanSheet.Cells(dataCleanSheet.Rows.Count, "B").End(xlUp).Row
+    If dataCleanSheet.Cells(dataCleanSheet.Rows.Count, "D").End(xlUp).Row > lastRow Then
+        lastRow = dataCleanSheet.Cells(dataCleanSheet.Rows.Count, "D").End(xlUp).Row
+    End If
 
     With dataCleanSheet.Range("A1:H" & lastRow)
-
         .Font.Name = "Calibri"
-
         .Font.Size = 11
-
         .VerticalAlignment = xlTop
+    End With
 
+    dataCleanSheet.Columns("A").ColumnWidth = 12
+    dataCleanSheet.Columns("B").ColumnWidth = 14
+    dataCleanSheet.Columns("C").ColumnWidth = 4
+    dataCleanSheet.Columns("D").ColumnWidth = 72
+    dataCleanSheet.Columns("E").ColumnWidth = 12
+    dataCleanSheet.Columns("F:H").ColumnWidth = 10
+
+    With dataCleanSheet.Range("A1:A" & lastRow)
+        .WrapText = False
+        .HorizontalAlignment = xlLeft
+    End With
+
+    With dataCleanSheet.Range("B1:B" & lastRow)
+        .WrapText = False
+        .HorizontalAlignment = xlRight
+    End With
+
+    With dataCleanSheet.Range("D1:D" & lastRow)
+        .WrapText = True
+        .HorizontalAlignment = xlLeft
     End With
 
     For i = 1 To lastRow
-
-        bText = Trim(CStr(dataCleanSheet.Cells(i, "B").Value))
-
-        dText = Trim(CStr(dataCleanSheet.Cells(i, "D").Value))
-
-        If dataCleanSheet.Cells(i, "B").MergeCells = False Then
-
-            If bText <> "" Then
-
-                If dText <> "" Then
-
-                    If Left(dText, 1) <> Chr(149) Then
-
-                        dataCleanSheet.Cells(i, "C").Value = dataCleanSheet.Cells(i, "D").Value
-
-                        dataCleanSheet.Cells(i, "D").ClearContents
-
-                    End If
-
-                End If
-
-            End If
-
-            If bText = "�" Or bText = "?" Then
-
-                dataCleanSheet.Cells(i, "B").ClearContents
-
-                dataCleanSheet.Cells(i, "C").Value = dataCleanSheet.Cells(i, "D").Value
-
-                dataCleanSheet.Cells(i, "D").ClearContents
-
-                dataCleanSheet.Cells(i, "C").IndentLevel = 1
-
-            End If
-
+        If dataCleanSheet.Cells(i, "B").MergeCells Then
+            With dataCleanSheet.Rows(i)
+                .RowHeight = 20
+                .Font.Bold = True
+            End With
         End If
-
     Next i
 
-    dataCleanSheet.Columns("A").ColumnWidth = 18
-
-    dataCleanSheet.Columns("B").ColumnWidth = 11
-
-    dataCleanSheet.Columns("C").ColumnWidth = 72
-
-    dataCleanSheet.Columns("D").ColumnWidth = 2
-
-    dataCleanSheet.Columns("A").WrapText = False
-
-    dataCleanSheet.Columns("B").HorizontalAlignment = xlRight
-
-    dataCleanSheet.Columns("C").HorizontalAlignment = xlLeft
-
-    dataCleanSheet.Columns("C").WrapText = True
-
     dataCleanSheet.Rows("1:" & lastRow).AutoFit
-
 End Sub
-
 
 
 Sub addFlightOrderLeftCommentPreflight()
@@ -3422,7 +3378,7 @@ Sub OpenEmailTieIn()
         Exit Sub
     End If
 
-    emailHtml = TIR_BuildEmailHtml(ws, 4, lastRow)
+    emailHtml = TIR_BuildDashboardEmailHtml(ws, 4, lastRow)
 
     On Error Resume Next
     Set outlookApp = GetObject(, "Outlook.Application")
@@ -3449,62 +3405,651 @@ Sub OpenEmailTieIn()
 End Sub
 
 
-Private Function TIR_BuildEmailHtml(ByVal ws As Worksheet, ByVal firstRow As Long, ByVal lastRow As Long) As String
-   Dim html As String
-   Dim r As Long
-   Dim bText As String, cText As String, dText As String
-   Dim rowText As String, jobText As String
-   Dim fontColor As String, bgColor As String
-   html = "<html><body style='margin:0;padding:0;font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#000000;'>"
-   html = html & "<div style='width:1000px;font-family:Calibri,Arial,sans-serif;font-size:11pt;'>"
-   For r = firstRow To lastRow
-       bText = TIR_CleanCellText(ws.Cells(r, "B").Value)
-       cText = TIR_CleanCellText(ws.Cells(r, "C").Value)
-       dText = TIR_CleanCellText(ws.Cells(r, "D").Value)
-       rowText = TIR_CombineRowText(bText, cText, dText)
-       If TIR_RowIsBlank(bText, cText, dText) Then
-           html = html & "<div style='height:8px;line-height:8px;font-size:4pt;'>&nbsp;</div>"
-       ElseIf TIR_IsAirplaneHeaderRow(ws, r) Then
-           bgColor = TIR_GetFillColor(ws.Cells(r, "B"))
-           If bgColor = "transparent" Then bgColor = "#FFFF00"
-           html = html & "<div style='margin:8px 0 6px 0;padding:4px 8px;text-align:center;font-weight:bold;background-color:" & bgColor & ";color:#000000;'>"
-           html = html & TIR_HtmlEncode(UCase$(rowText)) & "</div>"
-       ElseIf TIR_IsLegendRow(bText, cText, dText) Or TIR_IsSummaryRow(bText, cText, dText) Then
-           fontColor = TIR_GetCellColor(TIR_FirstStyledCell(ws, r))
-           html = html & "<div style='text-align:center;padding:2px 0;font-weight:bold;color:" & fontColor & ";'>"
-           html = html & TIR_HtmlEncode(UCase$(rowText)) & "</div>"
-       ElseIf TIR_IsPomDateRow(bText, cText, dText) Then
-           html = html & "<div style='margin-top:12px;margin-bottom:4px;font-weight:bold;color:#555555;'>"
-           html = html & TIR_HtmlEncode(UCase$(rowText)) & "</div>"
-       ElseIf TIR_IsBulletRow(bText, cText, dText) Or Left(cText, 1) = ChrW(8226) Or Left(dText, 1) = ChrW(8226) Then
-           jobText = TIR_FirstNonBlankText(cText, dText, "")
-           jobText = Replace(jobText, ChrW(8226), "")
-           html = html & "<div style='margin-left:130px;padding:1px 0 3px 0;'>"
-           html = html & "&bull;&nbsp;" & TIR_HtmlEncode(UCase$(Trim(jobText))) & "</div>"
-       ElseIf bText <> "" And cText = "" And dText = "" And InStr(1, bText, ":", vbTextCompare) = 0 Then
-           fontColor = TIR_GetCellColor(ws.Cells(r, "B"))
-           html = html & "<div style='margin-top:8px;margin-bottom:3px;font-weight:bold;color:" & fontColor & ";'>"
-           html = html & TIR_HtmlEncode(UCase$(bText)) & "</div>"
-       Else
-            jobText = TIR_FirstNonBlankText(cText, dText, "")
-            fontColor = TIR_GetCellColor(ws.Cells(r, "B"))
-            If TIR_GetCellColor(ws.Cells(r, "C")) <> "#000000" Then
-                fontColor = TIR_GetCellColor(ws.Cells(r, "C"))
+
+
+ ' ============================================================
+' DASHBOARD EMAIL BUILDER v3.1 BETA
+' Purpose:
+'   Shift turnover dashboard first, full work package second.
+'   Uses DataClean as the generated data source.
+'   Uses Airplane List C2:C8 for LN, E2:E8 for manual status, F2:F8 for location.
+'   No Excel range copy/paste. No clipboard dependency.
+' ============================================================
+
+Private Function TIR_BuildDashboardEmailHtml(ByVal ws As Worksheet, ByVal firstRow As Long, ByVal lastRow As Long) As String
+    Dim html As String
+    Dim r As Long
+    Dim ac As String
+    Dim pendingHeader As String
+    Dim categoryName As String
+    Dim jobNum As String
+    Dim jobDesc As String
+    Dim jobComment As String
+    Dim jobColor As String
+    Dim listLine As String
+    Dim totalAircraft As Long
+    Dim totalJobs As Long
+    Dim totalSold As Long
+    Dim totalAdds As Long
+    Dim totalUpdates As Long
+    Dim totalNotes As Long
+    Dim aircraftOrder As Object
+    Dim aircraftDisplay As Object
+    Dim aircraftJobs As Object
+    Dim aircraftSold As Object
+    Dim aircraftAdds As Object
+    Dim aircraftUpdates As Object
+    Dim aircraftCompletedList As Object
+    Dim aircraftNewList As Object
+    Dim aircraftUpdatedList As Object
+    Dim aircraftCategories As Object
+    Dim categoryJobs As Object
+
+    Set aircraftOrder = CreateObject("Scripting.Dictionary")
+    Set aircraftDisplay = CreateObject("Scripting.Dictionary")
+    Set aircraftJobs = CreateObject("Scripting.Dictionary")
+    Set aircraftSold = CreateObject("Scripting.Dictionary")
+    Set aircraftAdds = CreateObject("Scripting.Dictionary")
+    Set aircraftUpdates = CreateObject("Scripting.Dictionary")
+    Set aircraftCompletedList = CreateObject("Scripting.Dictionary")
+    Set aircraftNewList = CreateObject("Scripting.Dictionary")
+    Set aircraftUpdatedList = CreateObject("Scripting.Dictionary")
+    Set aircraftCategories = CreateObject("Scripting.Dictionary")
+    Set categoryJobs = CreateObject("Scripting.Dictionary")
+
+    pendingHeader = ""
+
+    For r = firstRow To lastRow
+        If TIR_IsAirplaneHeaderRow(ws, r) Then
+            pendingHeader = TIR_CombineRowText(TIR_CleanCellText(ws.Cells(r, "B").Text), TIR_CleanCellText(ws.Cells(r, "C").Text), TIR_CleanCellText(ws.Cells(r, "D").Text))
+        End If
+
+        If TIR_DashIsJobRow(ws, r) Then
+            ac = TIR_CleanCellText(ws.Cells(r, "A").Value)
+            If ac = "" Then ac = "UNKNOWN"
+
+            If aircraftOrder.Exists(ac) = False Then
+                aircraftOrder.Add ac, ac
+                aircraftJobs.Add ac, 0
+                aircraftSold.Add ac, 0
+                aircraftAdds.Add ac, 0
+                aircraftUpdates.Add ac, 0
+                aircraftCompletedList.Add ac, ""
+                aircraftNewList.Add ac, ""
+                aircraftUpdatedList.Add ac, ""
+                aircraftCategories.Add ac, ""
+                If pendingHeader <> "" Then
+                    aircraftDisplay.Add ac, pendingHeader
+                Else
+                    aircraftDisplay.Add ac, ac
+                End If
             End If
-            If TIR_GetCellColor(ws.Cells(r, "D")) <> "#000000" Then
-                fontColor = TIR_GetCellColor(ws.Cells(r, "D"))
+
+            aircraftJobs(ac) = CLng(aircraftJobs(ac)) + 1
+            totalJobs = totalJobs + 1
+
+            jobNum = TIR_CleanCellText(ws.Cells(r, "B").Value)
+            jobDesc = TIR_CleanCellText(ws.Cells(r, "D").Value)
+            jobComment = TIR_DashGetCommentForJob(ws, r, lastRow)
+            categoryName = TIR_CleanCellText(ws.Cells(r, "K").Value)
+            If categoryName = "" Then categoryName = "MISC"
+
+            jobColor = "#333333"
+            If TIR_CleanCellText(ws.Cells(r, "H").Value) <> "" Then jobColor = "#7030A0"
+            If TIR_CleanCellText(ws.Cells(r, "F").Value) <> "" Then jobColor = "#008000"
+            If TIR_CleanCellText(ws.Cells(r, "G").Value) <> "" Then jobColor = "#0057B8"
+
+            If TIR_CleanCellText(ws.Cells(r, "H").Value) <> "" Then
+                aircraftSold(ac) = CLng(aircraftSold(ac)) + 1
+                totalSold = totalSold + 1
+                listLine = TIR_DashPanelItem(jobNum, jobDesc, "#7030A0")
+                aircraftCompletedList(ac) = CStr(aircraftCompletedList(ac)) & listLine
             End If
-            html = html & "<div style='margin-left:45px;padding:1px 0;color:" & fontColor & ";'>"
-            html = html & "<span style='font-weight:" & TIR_GetFontWeight(ws.Cells(r, "B")) & ";'>" & _
-                            TIR_HtmlEncode(UCase$(bText)) & "</span>"
-            html = html & "&nbsp;&nbsp;"
-            html = html & "<span>" & TIR_HtmlEncode(UCase$(jobText)) & "</span>"
+
+            If TIR_CleanCellText(ws.Cells(r, "F").Value) <> "" Then
+                aircraftAdds(ac) = CLng(aircraftAdds(ac)) + 1
+                totalAdds = totalAdds + 1
+                listLine = TIR_DashPanelItem(jobNum, jobDesc, "#008000")
+                aircraftNewList(ac) = CStr(aircraftNewList(ac)) & listLine
+            End If
+
+            If TIR_CleanCellText(ws.Cells(r, "G").Value) <> "" Then
+                aircraftUpdates(ac) = CLng(aircraftUpdates(ac)) + 1
+                totalUpdates = totalUpdates + 1
+                If jobComment <> "" Then
+                    listLine = TIR_DashPanelItem(jobNum, jobComment, "#0057B8")
+                Else
+                    listLine = TIR_DashPanelItem(jobNum, jobDesc, "#0057B8")
+                End If
+                aircraftUpdatedList(ac) = CStr(aircraftUpdatedList(ac)) & listLine
+            End If
+
+            If TIR_CleanCellText(ws.Cells(r, "H").Value) = "" Then
+                If InStr(1, "|" & aircraftCategories(ac) & "|", "|" & categoryName & "|", vbTextCompare) = 0 Then
+                    If aircraftCategories(ac) = "" Then
+                        aircraftCategories(ac) = categoryName
+                    Else
+                        aircraftCategories(ac) = aircraftCategories(ac) & "|" & categoryName
+                    End If
+                End If
+
+                listLine = TIR_DashJobLine(jobNum, jobDesc, jobComment, jobColor)
+                categoryJobs(ac & "||" & categoryName) = TIR_DashDictText(categoryJobs, ac & "||" & categoryName) & listLine
+            End If
+        End If
+    Next r
+
+    totalAircraft = aircraftOrder.Count
+    totalNotes = TIR_DashManualNoteCount()
+
+    html = "<html><body style='margin:0;padding:0;background:#FFFFFF;font-family:Calibri,Arial,sans-serif;font-size:12pt;color:#222222;'>"
+    html = html & "<div style='width:1180px;margin:0 auto;font-family:Calibri,Arial,sans-serif;font-size:12pt;color:#222222;'>"
+    html = html & TIR_DashExecutiveSummary(totalAircraft, totalJobs, totalSold, totalAdds, totalUpdates, totalNotes)
+    html = html & TIR_DashAircraftCards(aircraftOrder, aircraftDisplay, aircraftJobs, aircraftSold, aircraftAdds, aircraftUpdates, aircraftCompletedList, aircraftNewList, aircraftUpdatedList)
+    html = html & TIR_DashDetailSection(aircraftOrder, aircraftDisplay, aircraftSold, aircraftAdds, aircraftUpdates, aircraftCompletedList, aircraftNewList, aircraftUpdatedList, aircraftCategories, categoryJobs)
+    html = html & "</div></body></html>"
+
+    TIR_BuildDashboardEmailHtml = html
+End Function
+
+Private Function TIR_DashIsJobRow(ByVal ws As Worksheet, ByVal rowNumber As Long) As Boolean
+    Dim bText As String
+    Dim dText As String
+
+    If ws.Cells(rowNumber, "B").MergeCells Then
+        TIR_DashIsJobRow = False
+        Exit Function
+    End If
+
+    bText = TIR_CleanCellText(ws.Cells(rowNumber, "B").Value)
+    dText = TIR_CleanCellText(ws.Cells(rowNumber, "D").Value)
+
+    If bText = "" Then
+        TIR_DashIsJobRow = False
+        Exit Function
+    End If
+
+    If dText = "" Then
+        TIR_DashIsJobRow = False
+        Exit Function
+    End If
+
+    If bText = ChrW(8226) Then
+        TIR_DashIsJobRow = False
+        Exit Function
+    End If
+
+    If bText = "?" Then
+        TIR_DashIsJobRow = False
+        Exit Function
+    End If
+
+    If InStr(1, bText, ":", vbTextCompare) = 0 Then
+        TIR_DashIsJobRow = False
+        Exit Function
+    End If
+
+    TIR_DashIsJobRow = True
+End Function
+
+Private Function TIR_DashGetCommentForJob(ByVal ws As Worksheet, ByVal rowNumber As Long, ByVal lastRow As Long) As String
+    Dim nextB As String
+    Dim nextD As String
+    Dim eText As String
+
+    eText = TIR_CleanCellText(ws.Cells(rowNumber, "E").Value)
+    If eText <> "" Then
+        TIR_DashGetCommentForJob = eText
+        Exit Function
+    End If
+
+    If rowNumber < lastRow Then
+        nextB = TIR_CleanCellText(ws.Cells(rowNumber + 1, "B").Value)
+        nextD = TIR_CleanCellText(ws.Cells(rowNumber + 1, "D").Value)
+        If nextD <> "" Then
+            If nextB = ChrW(8226) Or nextB = "?" Or nextB = "*" Then
+                TIR_DashGetCommentForJob = nextD
+                Exit Function
+            End If
+        End If
+    End If
+
+    TIR_DashGetCommentForJob = ""
+End Function
+
+Private Function TIR_DashExecutiveSummary(ByVal aircraftCount As Long, ByVal jobCount As Long, ByVal soldCount As Long, ByVal addCount As Long, ByVal updateCount As Long, ByVal noteCount As Long) As String
+    Dim html As String
+    Dim reportTime As String
+
+    reportTime = Format(Now, "mm/dd/yyyy hh:nn")
+    html = ""
+    html = html & "<div style='border:1px solid #B7B7B7;background:#F3F6FA;margin:0 0 14px 0;padding:14px 16px;'>"
+    html = html & "<div style='font-size:26pt;font-weight:bold;letter-spacing:.5px;color:#1F1F1F;'>TIE-IN SHIFT TURNOVER DASHBOARD</div>"
+    html = html & "<div style='font-size:11pt;color:#666666;margin-top:4px;'>WHAT CHANGED FIRST. FULL AIRCRAFT WORK LIST BELOW. GENERATED " & TIR_HtmlEncode(UCase$(reportTime)) & "</div>"
+    html = html & "<table cellpadding='0' cellspacing='0' style='border-collapse:collapse;margin-top:12px;font-family:Calibri,Arial,sans-serif;font-size:12pt;'><tr>"
+    html = html & TIR_DashMetricCell("AIRCRAFT", CStr(aircraftCount), "#333333")
+    html = html & TIR_DashMetricCell("TOTAL JOBS", CStr(jobCount), "#333333")
+    html = html & TIR_DashMetricCell("COMPLETED", CStr(soldCount), "#7030A0")
+    html = html & TIR_DashMetricCell("NEW ADDS", CStr(addCount), "#008000")
+    html = html & TIR_DashMetricCell("JOB STATUS CHANGES", CStr(updateCount), "#0057B8")
+    If noteCount > 0 Then html = html & TIR_DashMetricCell("STATUS NOTES", CStr(noteCount), "#C00000")
+    html = html & "</tr></table>"
+    html = html & "</div>"
+
+    TIR_DashExecutiveSummary = html
+End Function
+
+Private Function TIR_DashMetricCell(ByVal labelText As String, ByVal valueText As String, ByVal colorText As String) As String
+    Dim html As String
+
+    html = "<td style='padding:0 12px 0 0;'>"
+    html = html & "<div style='border-left:6px solid " & colorText & ";background:#FFFFFF;padding:8px 14px;min-width:105px;'>"
+    html = html & "<div style='font-size:24pt;font-weight:bold;color:" & colorText & ";line-height:22pt;'>" & TIR_HtmlEncode(valueText) & "</div>"
+    html = html & "<div style='font-size:10pt;color:#666666;font-weight:bold;'>" & TIR_HtmlEncode(UCase$(labelText)) & "</div>"
+    html = html & "</div></td>"
+
+    TIR_DashMetricCell = html
+End Function
+
+Private Function TIR_DashAircraftCards(ByVal aircraftOrder As Object, ByVal aircraftDisplay As Object, ByVal aircraftJobs As Object, ByVal aircraftSold As Object, ByVal aircraftAdds As Object, ByVal aircraftUpdates As Object, ByVal aircraftCompletedList As Object, ByVal aircraftNewList As Object, ByVal aircraftUpdatedList As Object) As String
+    Dim html As String
+    Dim ac As Variant
+    Dim colCount As Long
+
+    html = "<div style='font-size:20pt;font-weight:bold;color:#222222;margin:16px 0 10px 0;text-align:center;'>AIRCRAFT BRIEFING PANELS</div>"
+    html = html & "<table align='center' cellpadding='0' cellspacing='0' style='border-collapse:separate;border-spacing:18px 16px;width:1180px;font-family:Calibri,Arial,sans-serif;font-size:12pt;margin:0 auto;'>"
+
+    colCount = 0
+    For Each ac In aircraftOrder.Keys
+        If colCount = 0 Then html = html & "<tr>"
+        html = html & "<td style='width:560px;vertical-align:top;padding:0;'>"
+        html = html & TIR_DashAircraftCard(CStr(ac), CStr(aircraftDisplay(ac)), CLng(aircraftJobs(ac)), CLng(aircraftSold(ac)), CLng(aircraftAdds(ac)), CLng(aircraftUpdates(ac)), CStr(aircraftCompletedList(ac)), CStr(aircraftNewList(ac)), CStr(aircraftUpdatedList(ac)))
+        html = html & "</td>"
+        colCount = colCount + 1
+        If colCount = 2 Then
+            html = html & "</tr>"
+            colCount = 0
+        End If
+    Next ac
+
+    If colCount = 1 Then html = html & "<td style='width:560px;'>&nbsp;</td></tr>"
+    html = html & "</table>"
+
+    TIR_DashAircraftCards = html
+End Function
+
+Private Function TIR_DashAircraftCard(ByVal ac As String, ByVal displayName As String, ByVal jobCount As Long, ByVal soldCount As Long, ByVal addCount As Long, ByVal updateCount As Long, ByVal completedHtml As String, ByVal newHtml As String, ByVal updatedHtml As String) As String
+    Dim html As String
+    Dim statusText As String
+    Dim locationText As String
+    Dim vhvzText As String
+    Dim accentColor As String
+    Dim activityTypes As Long
+
+    statusText = TIR_DashAirplaneListValue(ac, displayName, "E")
+    locationText = TIR_DashAirplaneListValue(ac, displayName, "F")
+    vhvzText = TIR_DashAircraftVhVz(ac, displayName)
+
+    activityTypes = 0
+    If soldCount > 0 Then activityTypes = activityTypes + 1
+    If addCount > 0 Then activityTypes = activityTypes + 1
+    If updateCount > 0 Then activityTypes = activityTypes + 1
+
+    accentColor = "#808080"
+    If updateCount > 0 Then accentColor = "#0057B8"
+    If addCount > 0 Then accentColor = "#008000"
+    If soldCount > 0 Then accentColor = "#7030A0"
+    If activityTypes > 1 Then accentColor = "#C65911"
+
+    html = "<div style='border:1px solid #BFBFBF;border-left:8px solid " & accentColor & ";background:#FFFFFF;min-height:430px;'>"
+    html = html & "<div style='background:#FFF2CC;border-bottom:1px solid #D6B656;padding:14px 16px;'>"
+    html = html & "<div style='font-size:25pt;font-weight:bold;color:#000000;line-height:28pt;'>" & TIR_HtmlEncode(UCase$(displayName)) & "</div>"
+    If vhvzText <> "" Or locationText <> "" Then
+        html = html & "<div style='font-size:12pt;color:#444444;margin-top:3px;'>"
+        If vhvzText <> "" Then html = html & TIR_HtmlEncode(UCase$(vhvzText))
+        If vhvzText <> "" And locationText <> "" Then html = html & " &nbsp; | &nbsp; "
+        If locationText <> "" Then html = html & "LOCATION: <b>" & TIR_HtmlEncode(UCase$(locationText)) & "</b>"
+        html = html & "</div>"
+    End If
+    html = html & "</div>"
+
+    html = html & "<div style='padding:14px 16px;'>"
+    html = html & "<table cellpadding='0' cellspacing='0' style='border-collapse:collapse;width:100%;font-family:Calibri,Arial,sans-serif;font-size:12pt;margin-bottom:12px;'>"
+    html = html & TIR_DashCountRow("TOTAL JOBS", CStr(jobCount), "#333333")
+    html = html & TIR_DashCountRow("COMPLETED", CStr(soldCount), "#7030A0")
+    html = html & TIR_DashCountRow("NEW ADDS", CStr(addCount), "#008000")
+    html = html & TIR_DashCountRow("JOB STATUS CHANGES", CStr(updateCount), "#0057B8")
+    html = html & "</table>"
+
+    If statusText <> "" Then
+        html = html & "<div style='border-left:5px solid #C00000;background:#FFF2F2;padding:7px 9px;margin:8px 0 10px 0;'>"
+        html = html & "<div style='font-size:10pt;color:#7F0000;font-weight:bold;letter-spacing:.3px;'>AIRCRAFT STATUS</div>"
+        html = html & "<div style='font-size:15pt;color:#C00000;font-weight:bold;'>" & TIR_HtmlEncode(UCase$(statusText)) & "</div>"
+        html = html & "</div>"
+    End If
+
+    If completedHtml = "" And newHtml = "" And updatedHtml = "" Then
+        html = html & "<div style='font-size:12pt;color:#777777;border-top:1px solid #E6E6E6;padding-top:8px;'>NO SHIFT CHANGES</div>"
+    Else
+        html = html & "<div style='border-top:1px solid #E6E6E6;padding-top:8px;'>"
+        If completedHtml <> "" Then html = html & TIR_DashPanelGroup("COMPLETED", completedHtml, "#7030A0")
+        If newHtml <> "" Then html = html & TIR_DashPanelGroup("NEW ADDS", newHtml, "#008000")
+        If updatedHtml <> "" Then html = html & TIR_DashPanelGroup("JOB STATUS CHANGES", updatedHtml, "#0057B8")
+        html = html & "</div>"
+    End If
+
+    html = html & "</div></div>"
+
+    TIR_DashAircraftCard = html
+End Function
+
+Private Function TIR_DashCountRow(ByVal labelText As String, ByVal valueText As String, ByVal colorText As String) As String
+    Dim html As String
+
+    html = "<tr>"
+    html = html & "<td style='padding:2px 4px 2px 0;color:#555555;font-size:11pt;font-weight:bold;'>" & TIR_HtmlEncode(UCase$(labelText)) & "</td>"
+    html = html & "<td style='padding:2px 0;text-align:right;color:" & colorText & ";font-size:20pt;font-weight:bold;width:64px;'>" & TIR_HtmlEncode(valueText) & "</td>"
+    html = html & "</tr>"
+
+    TIR_DashCountRow = html
+End Function
+
+Private Function TIR_DashPanelGroup(ByVal titleText As String, ByVal itemHtml As String, ByVal colorText As String) As String
+    Dim html As String
+
+    html = "<div style='margin:7px 0 5px 0;'>"
+    html = html & "<div style='font-size:11pt;font-weight:bold;color:" & colorText & ";margin-bottom:2px;'>" & TIR_HtmlEncode(UCase$(titleText)) & "</div>"
+    html = html & itemHtml
+    html = html & "</div>"
+
+    TIR_DashPanelGroup = html
+End Function
+
+Private Function TIR_DashPanelItem(ByVal jobNum As String, ByVal textValue As String, ByVal colorText As String) As String
+    Dim html As String
+
+    html = "<div style='margin:2px 0 2px 8px;color:" & colorText & ";line-height:15pt;font-size:11.5pt;'>"
+    html = html & "<span style='font-weight:bold;'>" & TIR_HtmlEncode(UCase$(jobNum)) & "</span> "
+    html = html & "<span>" & TIR_HtmlEncode(UCase$(textValue)) & "</span>"
+    html = html & "</div>"
+
+    TIR_DashPanelItem = html
+End Function
+
+Private Function TIR_DashDetailSection(ByVal aircraftOrder As Object, ByVal aircraftDisplay As Object, ByVal aircraftSold As Object, ByVal aircraftAdds As Object, ByVal aircraftUpdates As Object, ByVal aircraftCompletedList As Object, ByVal aircraftNewList As Object, ByVal aircraftUpdatedList As Object, ByVal aircraftCategories As Object, ByVal categoryJobs As Object) As String
+    Dim html As String
+    Dim ac As Variant
+    Dim cats As Variant
+    Dim idx As Long
+    Dim categoryName As String
+    Dim key As String
+    Dim changesHtml As String
+
+    html = "<div style='font-size:20pt;font-weight:bold;color:#222222;margin:24px 0 10px 0;border-top:4px solid #333333;padding-top:14px;text-align:center;'>FULL AIRCRAFT WORK LIST</div>"
+
+    For Each ac In aircraftOrder.Keys
+        html = html & "<div style='margin:12px 0 18px 0;border:1px solid #D9D9D9;background:#FFFFFF;'>"
+        html = html & "<div style='background:#FFF2CC;padding:7px 10px;font-size:19pt;font-weight:bold;color:#000000;border-bottom:1px solid #D6B656;'>" & TIR_HtmlEncode(UCase$(CStr(aircraftDisplay(ac)))) & "</div>"
+
+        changesHtml = ""
+        If CStr(aircraftCompletedList(ac)) <> "" Then changesHtml = changesHtml & TIR_DashPanelGroup("COMPLETED", CStr(aircraftCompletedList(ac)), "#7030A0")
+        If CStr(aircraftNewList(ac)) <> "" Then changesHtml = changesHtml & TIR_DashPanelGroup("NEW ADDS", CStr(aircraftNewList(ac)), "#008000")
+        If CStr(aircraftUpdatedList(ac)) <> "" Then changesHtml = changesHtml & TIR_DashPanelGroup("JOB STATUS CHANGES", CStr(aircraftUpdatedList(ac)), "#0057B8")
+
+        If changesHtml <> "" Then
+            html = html & "<div style='background:#F7F7F7;border-left:6px solid #808080;padding:7px 10px;margin:8px 10px;'>"
+            html = html & "<div style='font-weight:bold;color:#333333;margin-bottom:3px;'>CHANGE SUMMARY</div>"
+            html = html & changesHtml
             html = html & "</div>"
         End If
-   Next r
-   html = html & "</div></body></html>"
-   TIR_BuildEmailHtml = html
+
+        cats = Split(CStr(aircraftCategories(ac)), "|")
+        For idx = LBound(cats) To UBound(cats)
+            categoryName = CStr(cats(idx))
+            key = CStr(ac) & "||" & categoryName
+            If categoryName <> "" Then
+                If categoryJobs.Exists(key) Then
+                    html = html & "<div style='margin:9px 10px 0 10px;padding-top:5px;border-top:1px solid #E6E6E6;'>"
+                    html = html & "<div style='font-weight:bold;color:#C55A11;text-decoration:underline;font-size:14pt;margin-bottom:4px;'>" & TIR_HtmlEncode(UCase$(categoryName)) & "</div>"
+                    html = html & CStr(categoryJobs(key))
+                    html = html & "</div>"
+                End If
+            End If
+        Next idx
+
+        html = html & "<div style='height:8px;line-height:8px;font-size:4pt;'>&nbsp;</div>"
+        html = html & "</div>"
+    Next ac
+
+    TIR_DashDetailSection = html
 End Function
+
+Private Function TIR_DashJobLine(ByVal jobNum As String, ByVal jobDesc As String, ByVal jobComment As String, ByVal colorText As String) As String
+    Dim html As String
+    Dim commentColor As String
+    Dim commentWeight As String
+
+    html = "<div style='margin:3px 0 2px 18px;color:" & colorText & ";line-height:16pt;font-size:12pt;'>"
+    html = html & "<span style='display:inline-block;width:112px;font-weight:bold;text-align:right;'>" & TIR_HtmlEncode(UCase$(jobNum)) & "</span>"
+    html = html & "<span style='display:inline-block;margin-left:12px;'>" & TIR_HtmlEncode(UCase$(jobDesc)) & "</span>"
+    html = html & "</div>"
+
+    If jobComment <> "" Then
+        commentColor = "#555555"
+        commentWeight = "normal"
+        If UCase$(colorText) = "#0057B8" Then
+            commentColor = "#0057B8"
+            commentWeight = "bold"
+        End If
+        html = html & "<div style='margin:0 0 5px 158px;color:" & commentColor & ";font-weight:" & commentWeight & ";font-size:11.5pt;line-height:14pt;'>"
+        html = html & "&bull;&nbsp;" & TIR_HtmlEncode(UCase$(jobComment))
+        html = html & "</div>"
+    End If
+
+    TIR_DashJobLine = html
+End Function
+
+Private Function TIR_DashDictText(ByVal dict As Object, ByVal key As String) As String
+    If dict.Exists(key) Then
+        TIR_DashDictText = CStr(dict(key))
+    Else
+        TIR_DashDictText = ""
+    End If
+End Function
+
+Private Function TIR_DashManualNoteCount() As Long
+    Dim wsAir As Worksheet
+    Dim r As Long
+
+    On Error Resume Next
+    Set wsAir = ThisWorkbook.Sheets("Airplane List")
+    On Error GoTo 0
+
+    If wsAir Is Nothing Then
+        TIR_DashManualNoteCount = 0
+        Exit Function
+    End If
+
+    For r = 2 To 8
+        If Trim(CStr(wsAir.Cells(r, "C").Value)) <> "" And Trim(CStr(wsAir.Cells(r, "E").Value)) <> "" Then
+            TIR_DashManualNoteCount = TIR_DashManualNoteCount + 1
+        End If
+    Next r
+End Function
+
+Private Function TIR_DashAirplaneListValue(ByVal ac As String, ByVal displayName As String, ByVal columnLetter As String) As String
+    Dim wsAir As Worksheet
+    Dim r As Long
+    Dim lineText As String
+
+    On Error Resume Next
+    Set wsAir = ThisWorkbook.Sheets("Airplane List")
+    On Error GoTo 0
+
+    If wsAir Is Nothing Then
+        TIR_DashAirplaneListValue = ""
+        Exit Function
+    End If
+
+    For r = 2 To 8
+        lineText = Trim(CStr(wsAir.Cells(r, "C").Value))
+        If lineText <> "" Then
+            If UCase$(lineText) = UCase$(ac) Or InStr(1, UCase$(displayName), UCase$(lineText), vbTextCompare) > 0 Then
+                TIR_DashAirplaneListValue = Trim(CStr(wsAir.Cells(r, columnLetter).Value))
+                Exit Function
+            End If
+        End If
+    Next r
+
+    TIR_DashAirplaneListValue = ""
+End Function
+
+Private Function TIR_DashAircraftVhVz(ByVal ac As String, ByVal displayName As String) As String
+    Dim wsAir As Worksheet
+    Dim r As Long
+    Dim lineText As String
+    Dim vhText As String
+    Dim vzText As String
+
+    On Error Resume Next
+    Set wsAir = ThisWorkbook.Sheets("Airplane List")
+    On Error GoTo 0
+
+    If wsAir Is Nothing Then
+        TIR_DashAircraftVhVz = ""
+        Exit Function
+    End If
+
+    For r = 2 To 8
+        lineText = Trim(CStr(wsAir.Cells(r, "C").Value))
+        If lineText <> "" Then
+            If UCase$(lineText) = UCase$(ac) Or InStr(1, UCase$(displayName), UCase$(lineText), vbTextCompare) > 0 Then
+                vhText = Trim(CStr(wsAir.Cells(r, "A").Value))
+                vzText = Trim(CStr(wsAir.Cells(r, "B").Value))
+                If vhText <> "" And vzText <> "" Then
+                    TIR_DashAircraftVhVz = vhText & " / " & vzText
+                ElseIf vhText <> "" Then
+                    TIR_DashAircraftVhVz = vhText
+                ElseIf vzText <> "" Then
+                    TIR_DashAircraftVhVz = vzText
+                Else
+                    TIR_DashAircraftVhVz = ""
+                End If
+                Exit Function
+            End If
+        End If
+    Next r
+
+    TIR_DashAircraftVhVz = ""
+End Function
+
+Private Function TIR_BuildEmailHtml(ByVal ws As Worksheet, ByVal firstRow As Long, ByVal lastRow As Long) As String
+    Dim html As String
+    Dim r As Long
+    Dim bText As String
+    Dim cText As String
+    Dim dText As String
+    Dim rowText As String
+    Dim jobText As String
+    Dim fontColor As String
+    Dim fontWeight As String
+    Dim bgColor As String
+    Dim currentCategory As String
+    Dim categoryOpen As Boolean
+    Dim aircraftOpen As Boolean
+    Dim categoryColor As String
+    Dim jobColor As String
+    Dim descColor As String
+    Dim commentColor As String
+
+    categoryOpen = False
+    aircraftOpen = False
+    currentCategory = ""
+
+    html = ""
+    html = html & "<html><body style='margin:0;padding:0;background-color:#FFFFFF;font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#202020;'>"
+    html = html & "<div style='width:920px;margin:0 auto;padding:8px 0 14px 0;font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#202020;'>"
+
+    For r = firstRow To lastRow
+        bText = TIR_CleanCellText(ws.Cells(r, "B").Value)
+        cText = TIR_CleanCellText(ws.Cells(r, "C").Value)
+        dText = TIR_CleanCellText(ws.Cells(r, "D").Value)
+        rowText = TIR_CombineRowText(bText, cText, dText)
+
+        If TIR_RowIsBlank(bText, cText, dText) Then
+            ' Skip blank worksheet spacer rows. HTML spacing is controlled by the layout below.
+
+        ElseIf TIR_IsLegendRow(bText, cText, dText) Or TIR_IsSummaryRow(bText, cText, dText) Then
+            If aircraftOpen = False Then
+                If InStr(1, UCase$(rowText), "COMMENT UPDATES", vbTextCompare) > 0 Then fontColor = "#0000CC"
+                If InStr(1, UCase$(rowText), "COMPLETED JOBS", vbTextCompare) > 0 Then fontColor = "#800080"
+                If InStr(1, UCase$(rowText), "NEW JOB ADDS", vbTextCompare) > 0 Then fontColor = "#008000"
+                If InStr(1, UCase$(rowText), "JOB SELLS", vbTextCompare) > 0 Then fontColor = "#202020"
+                If InStr(1, UCase$(rowText), "JOB ADDS", vbTextCompare) > 0 Then fontColor = "#202020"
+                html = html & "<div style='text-align:center;font-weight:bold;font-size:13pt;line-height:18pt;color:" & fontColor & ";'>" & TIR_HtmlEncode(UCase$(rowText)) & "</div>"
+            End If
+
+        ElseIf TIR_IsPomDateRow(bText, cText, dText) Then
+            html = html & "<div style='margin:12px 0 5px 0;font-size:10pt;color:#555555;font-weight:bold;text-align:left;'>" & TIR_HtmlEncode(rowText) & "</div>"
+
+        ElseIf TIR_IsAirplaneHeaderRow(ws, r) Then
+            If categoryOpen Then
+                html = html & "</div>"
+                categoryOpen = False
+            End If
+            If aircraftOpen Then
+                html = html & "</div>"
+            End If
+            bgColor = TIR_GetFillColor(ws.Cells(r, "B"))
+            If bgColor = "transparent" Then bgColor = "#FFFF00"
+            html = html & "<div style='margin:10px 0 12px 0;border-left:1px solid #D9D9D9;border-right:1px solid #D9D9D9;border-bottom:1px solid #D9D9D9;background-color:#FFFFFF;'>"
+            html = html & "<div style='padding:5px 10px;text-align:center;background-color:" & bgColor & ";color:#000000;font-weight:bold;font-size:13pt;line-height:16pt;text-decoration:underline;'>" & TIR_HtmlEncode(UCase$(rowText)) & "</div>"
+            aircraftOpen = True
+
+        ElseIf TIR_IsBulletRow(bText, cText, dText) Or Left(cText, 1) = ChrW(8226) Or Left(dText, 1) = ChrW(8226) Then
+            jobText = TIR_FirstNonBlankText(cText, dText, "")
+            If Len(jobText) = 0 Then jobText = bText
+            jobText = Replace(jobText, ChrW(8226), "")
+            jobText = Replace(jobText, "•", "")
+            jobText = Trim(jobText)
+            commentColor = TIR_GetCellColor(ws.Cells(r, "C"))
+            If commentColor = "#000000" Then commentColor = TIR_GetCellColor(ws.Cells(r, "D"))
+            If commentColor = "#000000" Then commentColor = "#0000CC"
+            html = html & "<div style='margin-left:160px;margin-top:1px;margin-bottom:5px;color:" & commentColor & ";font-weight:bold;font-size:10.5pt;line-height:15pt;font-size:11.5pt;'>• " & TIR_HtmlEncode(UCase$(jobText)) & "</div>"
+
+        ElseIf bText <> "" And cText = "" And dText = "" And InStr(1, bText, ":", vbTextCompare) = 0 Then
+            If categoryOpen Then html = html & "</div>"
+            categoryColor = TIR_GetCellColor(ws.Cells(r, "B"))
+            If categoryColor = "#000000" Then categoryColor = "#C77C00"
+            currentCategory = bText
+            html = html & "<div style='margin:9px 12px 0 12px;padding:0 0 2px 0;border-top:1px solid #E6E6E6;'>"
+            html = html & "<div style='display:inline-block;margin-top:-1px;padding:4px 8px 2px 0;color:" & categoryColor & ";font-weight:bold;text-decoration:underline;font-size:11pt;line-height:16pt;font-size:12pt;'>" & TIR_HtmlEncode(UCase$(currentCategory)) & "</div>"
+            categoryOpen = True
+
+        Else
+            jobText = TIR_FirstNonBlankText(cText, dText, "")
+            jobColor = TIR_GetCellColor(ws.Cells(r, "B"))
+            descColor = TIR_GetCellColor(ws.Cells(r, "C"))
+            If descColor = "#000000" Then descColor = TIR_GetCellColor(ws.Cells(r, "D"))
+            If descColor = "#000000" Then descColor = jobColor
+            fontWeight = TIR_GetFontWeight(ws.Cells(r, "B"))
+            If TIR_GetFontWeight(ws.Cells(r, "C")) = "bold" Then fontWeight = "bold"
+            If TIR_GetFontWeight(ws.Cells(r, "D")) = "bold" Then fontWeight = "bold"
+
+            html = html & "<div style='margin-left:34px;margin-top:2px;margin-bottom:2px;line-height:16pt;font-size:12pt;font-size:10.5pt;color:" & descColor & ";font-weight:" & fontWeight & ";'>"
+            html = html & "<span style='display:inline-block;width:105px;text-align:right;color:" & jobColor & ";font-weight:" & fontWeight & ";'>" & TIR_HtmlEncode(UCase$(bText)) & "</span>"
+            html = html & "<span style='display:inline-block;margin-left:8px;color:" & descColor & ";font-weight:" & fontWeight & ";'>" & TIR_HtmlEncode(UCase$(jobText)) & "</span>"
+            html = html & "</div>"
+        End If
+    Next r
+
+    If categoryOpen Then html = html & "</div>"
+    If aircraftOpen Then html = html & "</div>"
+
+    html = html & "</div></body></html>"
+    TIR_BuildEmailHtml = html
+End Function
+
 
 Private Function TIR_RenderFullWidthRow(ByVal ws As Worksheet, ByVal rowNumber As Long, ByVal bText As String, ByVal cText As String, ByVal dText As String, ByVal alignText As String, ByVal noWrap As Boolean) As String
     Dim rowText As String
